@@ -628,9 +628,9 @@ void MainWindow::SwitchField(int x, int y, bool value)//funkcja ustawiająca w t
             item->setData(Qt::UserRole, QVariant(true));//ustawienie wartości true
         }
 
-        if(item->backgroundColor() != AliveColor)//jeśli kolor się zmienił
+        if(item->background() != AliveColor)//jeśli kolor się zmienił
         {
-            item->setBackgroundColor(AliveColor);//zmiana koloru tła
+            item->setBackground(AliveColor);//zmiana koloru tła
         }
     }
     else
@@ -640,9 +640,9 @@ void MainWindow::SwitchField(int x, int y, bool value)//funkcja ustawiająca w t
             item->setData(Qt::UserRole, QVariant(false));//ustawienie wartości false
         }
 
-        if(item->backgroundColor() != DeadColor)//jeśli kolor się zmienił
+        if(item->background() != DeadColor)//jeśli kolor się zmienił
         {
-            item->setBackgroundColor(DeadColor);//zmiana koloru tła item
+            item->setBackground(DeadColor);//zmiana koloru tła item
         }
     }
 }
