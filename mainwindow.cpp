@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->Torus, SIGNAL(toggled(bool)), Algorithm, SLOT(TorusState(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
     connect(Algorithm, SIGNAL(TorusStateInf(bool)), this, SLOT(TorusChange(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
 
-    qsrand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
+    srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
 
     SetInitialValues();//ustawienie wartości początkowych
 
@@ -505,7 +505,7 @@ void MainWindow::Generate()//metoda generująca losowe elementy na ekranie
         {
             for(int j = 0; j < ui->LifeField->columnCount(); ++j)//przejście przez wszystkie elementy tablicy roboczej algorytmu
             {
-                if((qrand() % 100) + 1 <= percent) emit(ui->LifeField->cellEntered(i,j));//jeśli losowa wartość jest mniejsza lub równa do zmienne percet, ustaw kwadracik jako żywy
+                if((rand() % 100) + 1 <= percent) emit(ui->LifeField->cellEntered(i,j));//jeśli losowa wartość jest mniejsza lub równa do zmienne percet, ustaw kwadracik jako żywy
             }
         }
     }

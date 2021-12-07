@@ -35,7 +35,6 @@ SettingWindow::SettingWindow(QWidget *parent) :
     connect(ui->pushButton_deselAllDead, SIGNAL(clicked(bool)), this, SLOT(uncheckAllDead()));//odznaczenie wszystkich opcji dla żywych komórek
 
 
-
     for(int i = 0; i < 9; ++i)
     {
         tableOfRulesAlive[i] = 0;
