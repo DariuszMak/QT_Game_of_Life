@@ -29,7 +29,6 @@ private slots:
     void ScreenAns();//metoda przkazująca do mainwindow wszystkie wartości logiczne w tablicy roboczej
     void ClearValues();//zerowanie wartości pól w tablicy roboczej algorytmu
     void Step();//metoda wykonująca wszystkie niezbędne obliczenia dla pojedynczego kroku algorytmu
-    void TorusState(bool);//metoda ustawiająca zmienną Torus (odpowiedzialną za zapętlanie) na odpowiednią wartość logiczną
 
 signals:
     void NewRowsInf(int);//sygnał przekazujący do mainwindow informację o zmienionej liczbie wierszy w algorytmie

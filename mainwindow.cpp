@@ -59,25 +59,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(ClearAlg()), Algorithm, SLOT(ClearValues()));//czyszczenie wszystkich wartości w tablicy roboczej algorytmu
     connect(this,SIGNAL(ScreenAsk()), Algorithm, SLOT(ScreenAns()));//po zapytaniu algorytmu na ekran zostaną przesłane wszystkie wartości logiczne prawdziwe
 
-    connect(ui->Move, SIGNAL(clicked()), this, SLOT(WindowStep()));//jeśli kliknie się na przycisk "krok" następuje weryfikacja, czy symulacja jest aktywna, jeśli tak, to później nastąpi naciśnięci przycisku "symulacja"
     connect(this, SIGNAL(DoStep()), Algorithm, SLOT(Step()));//jeśli kliknie się na przycisk "krok" następuje pojedyncza iteracja algorytmu
 
     connect(ui->SizeFieldSlider, SIGNAL(valueChanged(int)), this, SLOT(ResizeField(int)));//gdy zostanie przesunięty suwak z wartością
     connect(this, SIGNAL(TidyUp()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
     connect(ui->SetWholeScreen, SIGNAL(toggled(bool)), this, SLOT(SettingSize(bool)));//jeśli zmieniono wartość opcji dostępu do zmiany rozmiaru elementów w tabeli
-    connect(ui->Generator, SIGNAL(clicked()), this, SLOT(Generate()));//gdy został naciśnięty przycisk generowania, wywoła się funkcja generująca elementy na ekranie
-    connect(ui->Starter, SIGNAL(clicked()), this, SLOT(SimulationToggle()));//gdy został naciśnięty przycisk "symulacja", rozpoczyna się symulacja
-    connect(ui->MultiStarter, SIGNAL(clicked()), this, SLOT(MultiStep()));//gdy zosatał naciśnięty przycisk "wiele kroków", wywołany zostaje odpowiedni slot
-    connect(&Timer, SIGNAL(timeout()), this, SLOT(SimulationStep()));//połączenie przekroczenia wartości timera wywołuje następny krok
+
+
+
     //connect(&TimerController, SIGNAL(timeout()), this, SLOT(TimerControllerTimeout()));//połączenie przekroczenia wartości timera kontrolującego, wywołuje jego slot
-    connect(ui->SpeedDial, SIGNAL(valueChanged(int)), ui->SpeedLcd, SLOT(display(int)));//jeśli wartość pokrętła zosatnie zmieniona, wyświetli się ona na wyświetlaczu
     connect(ui->ProjWidth, SIGNAL(valueChanged(int)), this, SLOT(TidyUpScreen()));//jeśli zmieni się wartość dostępnej przestrzeni rozdzielczości, trzeba to uwzględnić na ekranie
     connect(ui->ProjHeight, SIGNAL(valueChanged(int)), this, SLOT(TidyUpScreen()));//jeśli zmieni się wartość dostępnej przestrzeni rozdzielczości, trzeba to uwzględnić na ekranie
     connect(ui->MaxSize, SIGNAL(toggled(bool)), this, SLOT(TidyUpScreen()));//gdy zostanie zaznaczona opcja maksymalnego rozmiaru, trzeba to uwzględnić na ekranie
 
-    connect(ui->Torus, SIGNAL(toggled(bool)), Algorithm, SLOT(TorusState(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
     connect(Algorithm, SIGNAL(TorusStateInf(bool)), this, SLOT(TorusChange(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
-
 
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
 
@@ -119,7 +114,6 @@ void MainWindow::closeEvent(QCloseEvent *event)//specjalna metoda do przedefiniw
 
 void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wartości początkowe (rozmiar, ilość kolumn i wierszy na interfejsie, domyślne kolory)
 {
-    emit(ui->Torus->toggled(ui->Torus->checkState()));//emisja sygnału uaktualnienia stanu zapętlania lub nie
     emit(ui->RowChanger->valueChanged(ui->RowChanger->value()));//wartości początkowe wierszy
     emit(ui->ColumnChanger->valueChanged(ui->ColumnChanger->value()));//wartości początkowe ilości kolumn
     emit(ui->SizeFieldSlider->valueChanged(ui->SizeFieldSlider->value()));//uaktualnienie wartości początkowej suwaka
@@ -128,21 +122,16 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
 
     emit(ui->SetWholeScreen->toggled(ui->SetWholeScreen->checkState()));//emisja sygnału w celu uaktualnienia stanu określanego przez checkboxa
-    emit(ui->SpeedDial->valueChanged(ui->SpeedDial->value()));//uaktualnienie wartości początkowej wyświelacza prękości w pokrętle
     emit(ui->ProjHeight->valueChanged(0));//uaktualnienie wartości początkowej wysokości pola w pikselach
     emit(ui->ProjWidth->valueChanged(0));//uaktualnienie wartości początkowej szerokości pola w pikselach
 
-
-    ui->NumberOfSteps->setValue(1000);
     ui->ProjWidth->setValue(900);
     ui->ProjHeight->setValue(450);
     ui->ColumnChanger->setValue(100);
     ui->RowChanger->setValue(50);
-    ui->Torus->setChecked(true);
 
     bool tableAliveTemp[9] = {false, false, true, true, false, false, false, false, false};//początkowe ustawienia dla reguł algorytmu dla żywych komórek
     bool tableDeadTemp[9] = {false, false, false, true, false, false, false, false, false};//początkowe ustawienia dla reguł algorytmu dla martwych komórek
-
 
     emit(ScreenAsk());//aktualizacja wszystkich stanów kwadracików w tabeli z algorytmem
 }
@@ -175,63 +164,11 @@ void MainWindow::Save()//metoda reagująca na przycisk "zapisz"
 //********Sloty*********
 
 
-
-
-void MainWindow::WindowStep()//slot wnikający, czy jest uruchomiona symulacja, reagujący na działanie przycisku "Krok"
-{
-    if(IsRunning) emit(ui->Starter->clicked());//jeśli symulacja jest aktywna i zostal wciśnięty przycisk "krok", trzeba wcisnąć też przycisk "symulacja"
-    emit(DoStep());//sygnał wykonania kroku w algorytmie
-}
-
-void MainWindow::SimulationToggle()//metoda włączająca, bądź wyłączająca symulację
-{
-    if(IsRunning) IsRunning = false;//zmiana wartości logicznej zmiennej odpowiedzialnej za uruchomioną symulację
-    else IsRunning = true;
-
-    if(IsRunning)//gdy symulacja trwa
-    {
-        //ui->Cleaner->setEnabled(false);//wyłączenie przycisku wyczyść
-        //ui->Generator->setEnabled(false);//wyłączenie przycisku symulacja
-        //TimerController.start();
-    }
-    else//gdy symulacja już jest zatrzymana
-    {
-        //ui->Cleaner->setEnabled(true);//włączenie przycisku wyczyść
-        //ui->Generator->setEnabled(true);//włączenie przycisku symulacja
-
-        Timer.stop();//zatrzymanie timera
-        //TimerController.stop();//zatrzymanie timera kontrolnego
-    }
-    emit(ScreenAsk());//aktualizacja wszystkich stanów kwadracików w tabeli z algorytmem
-}
-
-
 /*void MainWindow::TimerControllerTimeout()//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
 {
     //++MilisecondsPerFrame;
 }*/
 
-void MainWindow::Generate()//metoda generująca losowe elementy na ekranie
-{
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    bool done = false;//zmienna logiczna informująca, czy dana wartość została przyjęta
-    int percent = 30;//zmienna odpowiedzialna za prawdopodobieństwo wystąpienia w procentach żywego kwadracika
-
-    if(done)//jeśli nie przekazano wartości, wyjdź
-    {
-        emit(ui->Cleaner->clicked());//czyszczenie ekranu i wartości w algorytmie
-
-        for(int i = 0; i < ui->LifeField->rowCount(); ++i)
-        {
-            for(int j = 0; j < ui->LifeField->columnCount(); ++j)//przejście przez wszystkie elementy tablicy roboczej algorytmu
-            {
-                if((rand() % 100) + 1 <= percent) emit(ui->LifeField->cellEntered(i,j));//jeśli losowa wartość jest mniejsza lub równa do zmienne percet, ustaw kwadracik jako żywy
-            }
-        }
-    }
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-}
 
 void MainWindow::SettingSize(bool val)//slot włączający lub wyłączający dostęp do elementów zmiany rozmiaru
 {
@@ -314,7 +251,6 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
 
 void MainWindow::ClearScreen()//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
 {
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
     emit(ClearAlg());//wyzerowanie stanu całej tablicy w algorytmie
     //UpadeScreen();//aktualizacja danych na ekranie
     //RowsChanged(0);//wyskalowanie tabeli do rozmiaru 0
@@ -409,87 +345,6 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
 
-void MainWindow::StatusUpdate(int life, int iterations)//funkcja aktualizująca stan ile obiektów żyje oraz ile iteracji wystąpiło
-{
-    static int life_temp;//zmienna statyczna przechowująca wcześniejszą ilość żywych elementów
-    static int step_temp;
-
-    life_temp = life;//przypisanie do zmiennej statycznej nowej wartości (do późniejszego ponownego wykorzystania)
-    step_temp = iterations;
-
-    ui->LifeFeed->display(life);//wyświetlanie na wyświetlaczu liczby żywych komórek
-    ui->Iteration->display(iterations);//wyświetlanie na wyświetlaczu liczby iteracji
-    if(ui->LifeFeed->value())//jeśli choć jeden kwadracik żyje, należy uruchomić odpowiednie przyciski
-    {
-        ui->Move->setEnabled(true);//ustawienie przycisku "krok" jako aktywnego
-        ui->Starter->setEnabled(true);//ustawienie przycisku "symulacja" jako aktywnego
-        ui->MultiStarter->setEnabled(true);//ustawienie przycisku "wiele kroków" jako aktywnego
-    }
-    else
-    {
-        ui->Move->setEnabled(false);//ustawienie przycisku "krok" jako nieaktywnego
-        ui->Starter->setEnabled(false);//ustawienie przycisku "symulacja" jako nieaktywnego
-        ui->MultiStarter->setEnabled(false);//ustawienie przycisku "wiele kroków" jako nieaktywnego
-        if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, jeśli nie ma już żadnych pól żywych !!! BARDZO WAŻNY ELEMENT CAŁEGO PROGRAMU
-    }
-
-    QFont TempFont = ui->Starter->font();//przypisanie do zmiennej tymczasowej TempFont czcionki przycisku rozpoczynającego symulację
-
-    if(IsRunning)//gdy symulacja trwa
-    {
-        TempFont.setBold(true);//ustawienie odpowiedniej wielkości czcionki
-    }
-    else
-    {
-        TempFont.setBold(false);//ustawienie odpowiedniej wielkości czcionki
-    }
-
-    ui->Starter->setFont(TempFont);//ustawienie czcionki
-}
-
-void MainWindow::TorusChange(bool state)//slot przyjmujący stan zapętlania z algorytmu do mainwindow
-{
-    QFont TempFont = ui->Torus->font();//przypisanie do zmiennej tymczasowej TempFont czcionki checkboksa od ustawienia zapętlania
-    if(state) TempFont.setBold(true);//jeśli zmieniono na prawdzią, to ma być wytłuszczenia
-    else TempFont.setBold(false);//jeśli zapętlanie jest wyłączone, to nie ma być wytłuszczenia
-    ui->Torus->setFont(TempFont);//ustawienie czcionki
-}
-
-void MainWindow::on_action_Zapisz_triggered()
-{
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    Save();//funkcja zapisująca cały stan ekranu (wartości logicznych w tabeli)
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-}
-
-void MainWindow::on_actionWczytaj_jako_triggered()
-{
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    LoadAs();
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-}
-
-void MainWindow::on_actionZapisz_jako_triggered()
-{
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-}
-
-void MainWindow::on_actionWczytaj_triggered()
-{
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-}
-
-void MainWindow::on_action_Nowy_triggered()
-{
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-
-}
 
 void MainWindow::on_actionOd_wie_triggered()
 {
@@ -500,25 +355,21 @@ void MainWindow::on_actionOd_wie_triggered()
 void MainWindow::on_actionKolor_ywych_kom_rek_triggered()
 {
     bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symwulacji, gdy symulacja jest aktywna
     QColor TempAliveColor = ChooseAliveColor.getColor(AliveColor, 0, "Wybierz kolor dla żywych komórek");
     if(TempAliveColor != "" && TempAliveColor != AliveColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
     {
         AliveColor = TempAliveColor;//ualtualnianie koloru w zmiennej globalnej
         emit(ScreenAsk());//uaktualnianie koloru na ekranie
     }
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
 }
 
 void MainWindow::on_actionKo_lor_martwych_kom_rek_triggered()
 {
     bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
     QColor TempDeadColor = ChooseDeadColor.getColor(DeadColor, 0, "Wybierz kolor dla martwych komórek");
     if(TempDeadColor != "" && TempDeadColor != DeadColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
     {
         DeadColor = TempDeadColor;//ualtualnianie koloru w zmiennej globalnej
         emit(ScreenAsk());//uaktualnianie koloru na ekranie
     }
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
 }

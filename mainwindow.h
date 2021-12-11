@@ -81,24 +81,14 @@ private:
 private slots:
     void RowsChanged(int);//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości
     void ColumnsChanged(int);//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej
-    void StatusUpdate(int feeds, int iterations);//funkcja aktualizująca stan ile obiektów żyje oraz ile iteracji wystąpiło
     void SwitchField(int, int, bool);//funkcja ustawiająca w tabeli odpowiedni kwadracik w zależności od przyjętej wartości logicznej
     //void UpadeScreen();//funkcja aktualizująca stan ekranu z algorytmem
     void ClearScreen();//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
     void ResizeField(int);//funkcja przyjmująca rozmiar pojedynczego pola na ekranie
     void TidyUpScreen();//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
     void SettingSize(bool);//Slot włączający lub wyłączający dostęp do elementów zmiany rozmiaru
-    void Generate();//metoda generująca losowe elementy na ekranie
-    void SimulationToggle();//metoda włączająca, bądź wyłączająca symulację
     //void TimerControllerTimeout();//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
-    void WindowStep();//slot wnikający, czy jest uruchomiona symulacja, reagujący na działanie przycisku "Krok"
-    void TorusChange(bool);//slot przyjmujący stan zapętlania z algorytmu do mainwindow
-    void on_action_Zapisz_triggered();//slot wywoływany przez akcję "zapisz"
-    void on_actionWczytaj_jako_triggered();//slot wywoływany przez akcję "wczytaj jako..."
-    void on_actionZapisz_jako_triggered();//slot wywoływany przez akcję "zapisz jako..."
-    void on_actionWczytaj_triggered();//slot wywoływany przez akcję "wczytaj"
 
-    void on_action_Nowy_triggered();
 
     void on_actionOd_wie_triggered();
 

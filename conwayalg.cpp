@@ -222,9 +222,3 @@ void ConwayAlg::NewColumns(int newCol)//funkcja ustawiająca nową ilość kolum
     Columns = newCol; //zapis nowej wartości ilości kolumn do swojego pola
     emit(NewColumnsInf(newCol));//emisja sygnału do mainwindow informująca o zmianie rozmiaru obszaru działania (wiersze)
 }
-
-void ConwayAlg::TorusState(bool state)//metoda ustawiająca zmienną Torus (odpowiedzialną za zapętlanie) na odpowiednią wartość logiczną
-{
-    Torus = state;//przypisanie do zmiennej globalnej odpowiedniej wartości logicznej
-    emit(TorusStateInf(state));//sygnał przesyłający stan zapętlania do mainwindow
-}

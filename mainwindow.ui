@@ -553,13 +553,13 @@
                  <bool>false</bool>
                 </attribute>
                 <attribute name="horizontalHeaderDefaultSectionSize">
-                 <number>0</number>
+                 <number>31</number>
                 </attribute>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
                 <attribute name="verticalHeaderDefaultSectionSize">
-                 <number>0</number>
+                 <number>17</number>
                 </attribute>
                 <attribute name="verticalHeaderHighlightSections">
                  <bool>true</bool>
@@ -621,92 +621,6 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Żyje:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="LifeFeed">
-              <property name="minimumSize">
-               <size>
-                <width>135</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>135</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="digitCount">
-               <number>10</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::Flat</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Kroków:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="Iteration">
-              <property name="minimumSize">
-               <size>
-                <width>135</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>135</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="digitCount">
-               <number>10</number>
-              </property>
-              <property name="segmentStyle">
-               <enum>QLCDNumber::Flat</enum>
-              </property>
-              <property name="intValue" stdset="0">
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="Line" name="line_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="Generator">
-            <property name="text">
-             <string>Generuj życie</string>
-            </property>
-            <property name="shortcut">
-             <string>G</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="Cleaner">
             <property name="text">
              <string>Wyczyść</string>
@@ -715,190 +629,6 @@
              <string>W</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_12">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="Move">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Krok</string>
-            </property>
-            <property name="shortcut">
-             <string>K</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="autoRepeat">
-             <bool>false</bool>
-            </property>
-            <property name="autoRepeatDelay">
-             <number>400</number>
-            </property>
-            <property name="autoRepeatInterval">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
-            <item>
-             <widget class="QPushButton" name="MultiStarter">
-              <property name="font">
-               <font>
-                <pointsize>13</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Wiele kroków</string>
-              </property>
-              <property name="shortcut">
-               <string>Ctrl+K</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="NumberOfSteps">
-              <property name="minimumSize">
-               <size>
-                <width>95</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>95</width>
-                <height>27</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>2</number>
-              </property>
-              <property name="maximum">
-               <number>1000000</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QPushButton" name="Starter">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Symulacja</string>
-            </property>
-            <property name="shortcut">
-             <string>Return</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="Torus">
-            <property name="text">
-             <string>Torus</string>
-            </property>
-            <property name="shortcut">
-             <string>P</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Prędkość (ms):</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLCDNumber" name="SpeedLcd">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>27</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>27</height>
-                 </size>
-                </property>
-                <property name="digitCount">
-                 <number>7</number>
-                </property>
-                <property name="segmentStyle">
-                 <enum>QLCDNumber::Flat</enum>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QDial" name="SpeedDial">
-              <property name="minimumSize">
-               <size>
-                <width>150</width>
-                <height>150</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>200</number>
-              </property>
-              <property name="value">
-               <number>50</number>
-              </property>
-              <property name="invertedControls">
-               <bool>true</bool>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
           <item>
            <spacer name="verticalSpacer_2">
@@ -937,19 +667,9 @@
      <x>0</x>
      <y>0</y>
      <width>1113</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuPlik">
-    <property name="title">
-     <string>&amp;Plik</string>
-    </property>
-    <addaction name="action_Nowy"/>
-    <addaction name="actionWczytaj"/>
-    <addaction name="actionWczytaj_jako"/>
-    <addaction name="action_Zapisz"/>
-    <addaction name="actionZapisz_jako"/>
-   </widget>
    <widget class="QMenu" name="menuNarz_dzia">
     <property name="title">
      <string>&amp;Narzędzia</string>
@@ -958,22 +678,7 @@
     <addaction name="actionKolor_ywych_kom_rek"/>
     <addaction name="actionKo_lor_martwych_kom_rek"/>
    </widget>
-   <widget class="QMenu" name="menuP_omoc">
-    <property name="title">
-     <string>P&amp;omoc</string>
-    </property>
-    <addaction name="actionO_programie"/>
-   </widget>
-   <widget class="QMenu" name="menu_Edycja">
-    <property name="title">
-     <string>&amp;Edycja</string>
-    </property>
-    <addaction name="action_Ustawienia_zasad"/>
-   </widget>
-   <addaction name="menuPlik"/>
-   <addaction name="menu_Edycja"/>
    <addaction name="menuNarz_dzia"/>
-   <addaction name="menuP_omoc"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionWczytaj_jako">
@@ -1059,10 +764,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>Generator</tabstop>
-  <tabstop>Move</tabstop>
-  <tabstop>Starter</tabstop>
-  <tabstop>SpeedDial</tabstop>
   <tabstop>ProjWidth</tabstop>
   <tabstop>ProjHeight</tabstop>
   <tabstop>MaxSize</tabstop>
