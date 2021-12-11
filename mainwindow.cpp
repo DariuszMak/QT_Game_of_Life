@@ -81,21 +81,13 @@ MainWindow::~MainWindow()//destruktor okna MainWindow
 //********Prywatne metody*********
 
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    event->accept();
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)//specjalna metoda do przedefiniwania działań przy zamykaniu programu
 {
-    // QMessageBox msgBox;
-    // msgBox.setText("Czy napewno chcesz wyjść z programu?");
-    // msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    // msgBox.setDefaultButton(QMessageBox::No);
-    // int result = msgBox.exec();
-    // switch (result) {
-    //     case QMessageBox::Yes:
-           
-    //         break;
-    //     case QMessageBox::No:
-    //         event->ignore();
-    //         break;
-    // }
     event->accept();
     emit CloseOtherWindows();
 }
@@ -105,8 +97,8 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     AliveColor = QColor("yellow");//przypisanie kwadracikom żywym koloru żółtego
     DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
 
-    ui->ProjWidth->setValue(900);
-    ui->ProjHeight->setValue(450);
+    ui->ProjWidth->setValue(1280);
+    ui->ProjHeight->setValue(640);
     ui->ColumnChanger->setValue(128);
     ui->RowChanger->setValue(64);
 }

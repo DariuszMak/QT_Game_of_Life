@@ -76,6 +76,8 @@ private:
 
     void ChangeSet();//metoda zmieniająca tytuł okna oraz wartość zmiennej changed
 
+    void resizeEvent(QResizeEvent *event);
+
     void closeEvent(QCloseEvent * event);//specjalna metoda do przedefiniwania działań przy zamykaniu programu
 
 private slots:
