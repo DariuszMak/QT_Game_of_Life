@@ -20,3 +20,6 @@ HEADERS  += mainwindow.h \
     conwayalg.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    Projekt.pro.user

@@ -400,7 +400,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Gra w \u017cycie - Dariusz Makarewicz", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"LCD Simulator", None))
         self.actionWczytaj_jako.setText(QCoreApplication.translate("MainWindow", u"Wczyt&aj jako...", None))
 #if QT_CONFIG(shortcut)
         self.actionWczytaj_jako.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Shift+O", None))

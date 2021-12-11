@@ -9,20 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Algorithm = new ConwayAlg();//utworzenie nowego obiektu z klasy ConwayAlg
     ui->setupUi(this);
-    Timer.stop();//zatrzymanie timera
-    Timer.setTimerType(Qt::PreciseTimer);
-    Timer.setSingleShot(true);//jednorazowy sygnał przepełnienia
-//    TimerController.stop();//zatrzymanie timera kontrolnego
-//    TimerController.setInterval(1);//ustawienie interwału na jedną milisekundę
-//    TimerController.setTimerType(Qt::PreciseTimer);
-//    TimerController.setSingleShot(false);
-//    MilisecondsPerFrame = 0;
-    IsRunning = false;//zmienna wyznaczająca, czy symulacja trwa, czy nie
-    MinSizeSquare = 3;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
-    TitleProj = "Gra w życie - Dariusz Makarewicz";
-    UnsavePath = QDir::currentPath() + "/UNSAVED.life";//przyporządkowanie ścieżki zapisywania niezapisanego projektu (tylko tutaj jest to ustalone)
-    MainPath = "";//główna ścieżka dostępu do pliku przechowywana w programie
+    MinSizeSquare = 3;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
     //ustawienia komunikatu błędu zapisu
     SaveError.setWindowFlags(Qt::WindowStaysOnTopHint);//okno zawsze na wierzchu
@@ -93,72 +81,35 @@ MainWindow::~MainWindow()//destruktor okna MainWindow
 //********Prywatne metody*********
 
 
-
 void MainWindow::closeEvent(QCloseEvent *event)//specjalna metoda do przedefiniwania działań przy zamykaniu programu
 {
-    QMessageBox msgBox;
-    msgBox.setText("Czy napewno chcesz wyjść z programu?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::No);
-    int result = msgBox.exec();
-    switch (result) {
-        case QMessageBox::Yes:
-            event->accept();
-            emit CloseOtherWindows();
-            break;
-        case QMessageBox::No:
-            event->ignore();
-            break;
-    }
+    // QMessageBox msgBox;
+    // msgBox.setText("Czy napewno chcesz wyjść z programu?");
+    // msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    // msgBox.setDefaultButton(QMessageBox::No);
+    // int result = msgBox.exec();
+    // switch (result) {
+    //     case QMessageBox::Yes:
+           
+    //         break;
+    //     case QMessageBox::No:
+    //         event->ignore();
+    //         break;
+    // }
+    event->accept();
+    emit CloseOtherWindows();
 }
 
 void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wartości początkowe (rozmiar, ilość kolumn i wierszy na interfejsie, domyślne kolory)
 {
-    emit(ui->RowChanger->valueChanged(ui->RowChanger->value()));//wartości początkowe wierszy
-    emit(ui->ColumnChanger->valueChanged(ui->ColumnChanger->value()));//wartości początkowe ilości kolumn
-    emit(ui->SizeFieldSlider->valueChanged(ui->SizeFieldSlider->value()));//uaktualnienie wartości początkowej suwaka
-
     AliveColor = QColor("yellow");//przypisanie kwadracikom żywym koloru żółtego
     DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
 
-    emit(ui->SetWholeScreen->toggled(ui->SetWholeScreen->checkState()));//emisja sygnału w celu uaktualnienia stanu określanego przez checkboxa
-    emit(ui->ProjHeight->valueChanged(0));//uaktualnienie wartości początkowej wysokości pola w pikselach
-    emit(ui->ProjWidth->valueChanged(0));//uaktualnienie wartości początkowej szerokości pola w pikselach
-
     ui->ProjWidth->setValue(900);
     ui->ProjHeight->setValue(450);
-    ui->ColumnChanger->setValue(100);
-    ui->RowChanger->setValue(50);
-
-    bool tableAliveTemp[9] = {false, false, true, true, false, false, false, false, false};//początkowe ustawienia dla reguł algorytmu dla żywych komórek
-    bool tableDeadTemp[9] = {false, false, false, true, false, false, false, false, false};//początkowe ustawienia dla reguł algorytmu dla martwych komórek
-
-    emit(ScreenAsk());//aktualizacja wszystkich stanów kwadracików w tabeli z algorytmem
+    ui->ColumnChanger->setValue(128);
+    ui->RowChanger->setValue(64);
 }
-
-void MainWindow::LoadAs()//metoda ragująca na przycik wczytaj jako
-{
-    QString TempPath;//tymczasowa pomocnicza ścieżka
-    TempPath = QFileDialog::getOpenFileName(this, tr("Wybierz plik do wczytania"),"./","Pliki życia (*.life);; Wszystkie (*)");//podanie do zmiennej typu Qstring ścieżki z okna dialogowego
-    if(TempPath != "")// jeśli podana ścieżka jest różna od pustej
-    {
-        MainPath = TempPath;//zapamiętanie głównej ścieżki
-        char *path = MainPath.toLocal8Bit().data();//konwersja ścieżki do tablicy typu char (wskaźnik pierwszego elementu)
-    }
-}
-
-
-void MainWindow::Save()//metoda reagująca na przycisk "zapisz"
-{
-    if(MainPath == "")
-    {
-    }
-    else
-    { 
-    }
-}
-
-
 
 
 //********Sloty*********
@@ -217,12 +168,12 @@ void MainWindow::TidyUpScreen()//funkcja dobierająca właściwości w oknie tak
 
     ui->Page->setMinimumSize(ui->ProjWidth->value(), ui->ProjHeight->value());//skalowanie obszaru z ramką jako pole dostępne w pikselach - wartości minimalne
     ui->Page->setMaximumSize(ui->ProjWidth->value(), ui->ProjHeight->value());//skalowanie obszaru z ramką jako pole dostępne w pikselach - wartości maksymalne
-    //ui->Page->setMinimumHeight(ui->ProjHeight->value());
-    //ui->Page->setMinimumWidth(ui->ProjWidth->value());
-    //ui->Page->setMaximumHeight(ui->ProjHeight->value());
-    //ui->Page->setMaximumWidth(ui->ProjWidth->value());
+    ui->Page->setMinimumHeight(ui->ProjHeight->value());
+    ui->Page->setMinimumWidth(ui->ProjWidth->value());
+    ui->Page->setMaximumHeight(ui->ProjHeight->value());
+    ui->Page->setMaximumWidth(ui->ProjWidth->value());
 
-    //if(tempWidth < 300) tempWidth = 300;
+    if(tempWidth < 300) tempWidth = 300;
 
 
     ui->LifeField->setMinimumSize(tempWidth, tempHeight);//skalowanie tabeli - wartości minimalne
@@ -244,7 +195,7 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
 
     for(int i = 0; i < ui->LifeField->columnCount(); ++i)//przez wszystkie kolumny
     {
-        if(ui->LifeField->columnWidth(i) != NewSize)ui->LifeField->setColumnWidth(i, ui->SizeFieldLcd->value());//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
+        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, ui->SizeFieldLcd->value());//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
     }
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
 }
@@ -354,7 +305,6 @@ void MainWindow::on_actionOd_wie_triggered()
 
 void MainWindow::on_actionKolor_ywych_kom_rek_triggered()
 {
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
     QColor TempAliveColor = ChooseAliveColor.getColor(AliveColor, 0, "Wybierz kolor dla żywych komórek");
     if(TempAliveColor != "" && TempAliveColor != AliveColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
     {
@@ -365,7 +315,6 @@ void MainWindow::on_actionKolor_ywych_kom_rek_triggered()
 
 void MainWindow::on_actionKo_lor_martwych_kom_rek_triggered()
 {
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
     QColor TempDeadColor = ChooseDeadColor.getColor(DeadColor, 0, "Wybierz kolor dla martwych komórek");
     if(TempDeadColor != "" && TempDeadColor != DeadColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
     {

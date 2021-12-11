@@ -1,0 +1,8 @@
+{
+    "devices": [],
+    "driver_settings": [],
+    "interfaces": [],
+    "py/object": "model.settings.settings_manager.SettingsManager.Settings",
+    "serial_interfaces": [],
+    "tcp_interfaces": []
+}
