@@ -5,21 +5,19 @@
 #include <QInputDialog>
 #include <QObject>
 #include <QTimer>
-#include <settingwindow.h>
+
 
 class ConwayAlg : public QObject
 {
     Q_OBJECT
 public:
-    ConwayAlg( SettingWindow *);
+    ConwayAlg();
 private:
     int Rows;//obowiązująca liczba wierszy dla tablicy algorytmu
     int Columns;//obowiązująca liczba kolumn dla tablicy algorytmu
     int Feeds;//ilość pól żywych
     int Iterations;//ilość wykonanych iteracji
     bool Torus;//zmienna odpowiedzialna za zapętlanie
-
-    SettingWindow * SettingsWindowRules;//wskaźnik do obiektu z zasadami algorytmu
 
     QVector< QVector<bool> > Field;//wektor w wektorze, tablica dwuwymiarowa na której działamy w algorytmie
 

@@ -13,16 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    conwayalg.cpp \
-    help.cpp \
-    settingwindow.cpp
+        conwayalg.cpp \
+        mainwindow.cpp
 
 HEADERS  += mainwindow.h \
-    conwayalg.h \
-    help.h \
-    settingwindow.h
+    conwayalg.h
 
-FORMS    += mainwindow.ui \
-    help.ui \
-    settingwindow.ui
+FORMS    += mainwindow.ui

@@ -13,17 +13,12 @@ using namespace std;
 #include <QFileDialog>
 #include <QString>
 #include <QDialog>
+#include <QTimer>
 
 #include <QCloseEvent>
-
 #include "conwayalg.h"
 #include "ui_mainwindow.h"
 
-#include "help.h"
-#include "ui_help.h"
-
-#include "settingwindow.h"
-#include "ui_settingwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -39,9 +34,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
     ConwayAlg * Algorithm;//wskaźnik na obiekt klasy ConwayAlg
-    Help * HelpWindow;//utworzenie wskaźnika klasy help (okna z pomocą)
-    SettingWindow * SettingsWindow;//utworzenie wskaźnika klasy help (okna z ustawieniami zasad algrotytmu)
+
 
     bool IsRunning;//zmienna wyznaczająca, czy symulacja trwa, czy nie
     bool Changed;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
@@ -95,10 +90,8 @@ private slots:
     void SettingSize(bool);//Slot włączający lub wyłączający dostęp do elementów zmiany rozmiaru
     void Generate();//metoda generująca losowe elementy na ekranie
     void SimulationToggle();//metoda włączająca, bądź wyłączająca symulację
-    void SimulationStep();//pojedynczy krok, wywołany przez przepełnienie timera
     //void TimerControllerTimeout();//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
     void WindowStep();//slot wnikający, czy jest uruchomiona symulacja, reagujący na działanie przycisku "Krok"
-    void MultiStep();//slot wykonujący wiele kroków algorytmu bez wyświetlania go
     void TorusChange(bool);//slot przyjmujący stan zapętlania z algorytmu do mainwindow
     void on_action_Zapisz_triggered();//slot wywoływany przez akcję "zapisz"
     void on_actionWczytaj_jako_triggered();//slot wywoływany przez akcję "wczytaj jako..."
@@ -112,10 +105,6 @@ private slots:
     void on_actionKolor_ywych_kom_rek_triggered();
 
     void on_actionKo_lor_martwych_kom_rek_triggered();
-
-    void on_actionO_programie_triggered();
-
-    void on_action_Ustawienia_zasad_triggered();
 
 signals:
 

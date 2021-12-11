@@ -1,17 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "conwayalg.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)//konstruktor MainWindow
 {
-    HelpWindow = new Help(this);//utworzenie elementu klasy help (okna z pomocą), parent jako mainwindow
-
-    SettingsWindow = new SettingWindow(this);//utworzenie elementu klasy "SettingWindow" (okna z ustawieniami reguł algorytmu), parentem jest mainwindow (to okno)
-
-    Algorithm = new ConwayAlg(SettingsWindow);//utworzenie nowego obiektu z klasy ConwayAlg
-
+    Algorithm = new ConwayAlg();//utworzenie nowego obiektu z klasy ConwayAlg
     ui->setupUi(this);
     Timer.stop();//zatrzymanie timera
     Timer.setTimerType(Qt::PreciseTimer);
@@ -50,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     WillBeSaved.setIcon(QMessageBox::Information);
     WillBeSaved.setText("Dane zostaną zapisane do pliku o ścieżce: " + UnsavePath);
 
+
     connect(ui->ColumnChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewColumns(int)));//jeśli wartość z pola do wprowadzania ilości kolumn zmieniła się, to należy zaktualizować ilośc kolumn na ekranie (później też w algortymie przez sygnał NewCols())
     connect(ui->RowChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewRows(int)));//jeśli wartość z pola do wprowadzania ilości wierszy zmieniła się, to należy zaktualizować ilośc wierszy na ekranie (później też w algortymie przez sygnał NewRows())
     connect(Algorithm, SIGNAL(NewColumnsInf(int)), this, SLOT(ColumnsChanged(int)));//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości z algorytmu
@@ -81,22 +78,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->Torus, SIGNAL(toggled(bool)), Algorithm, SLOT(TorusState(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
     connect(Algorithm, SIGNAL(TorusStateInf(bool)), this, SLOT(TorusChange(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
 
+
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
 
     SetInitialValues();//ustawienie wartości początkowych
 
     Changed = false;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
-    setWindowTitle(TitleProj);// ustawienie początkowego tytułu programu
+//    setWindowTitle(TitleProj);// ustawienie początkowego tytułu programu
     //Load();//otwarcie domyślnej ścieżki pliku
 }
 
 MainWindow::~MainWindow()//destruktor okna MainWindow
 {
-    SaveUnsaved();//wywołanie metody pytającej, czy zapisać niezapisany plik
     delete ui;
-    delete Algorithm;
-    delete HelpWindow;
-    delete SettingsWindow;
 }
 
 
@@ -149,66 +143,8 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     bool tableAliveTemp[9] = {false, false, true, true, false, false, false, false, false};//początkowe ustawienia dla reguł algorytmu dla żywych komórek
     bool tableDeadTemp[9] = {false, false, false, true, false, false, false, false, false};//początkowe ustawienia dla reguł algorytmu dla martwych komórek
 
-    for( int i = 0; i < 9; ++i )
-    {
-        SettingsWindow->setTableAlive( i, tableAliveTemp[i] );
-        SettingsWindow->setTableDead( i, tableDeadTemp[i] );
-    }
 
     emit(ScreenAsk());//aktualizacja wszystkich stanów kwadracików w tabeli z algorytmem
-}
-
-void MainWindow::SaveUnsaved()//metoda pytająca, czy zapisać niezapisany plik
-{
-    if(Changed)//zapisanie niezapisanego projektu, gdy nastąpiła zmiana w stosunku do oryginału
-    {
-        if(MainPath == "")//jeśli nie wybrano żadnego pliku
-        {
-            WillBeSaved.exec();//komunikat informujący o zapisaniu w domyślnej lokalizacji zapisu
-            MainPath = UnsavePath;//ustawienie (tylko chwilowo) głównej ścieżki jako domyślnej lokalizacji
-            char *path = UnsavePath.toLocal8Bit().data();//konwersja ścieżki do tablicy typu char (wskaźnik pierwszego elementu)
-            SaveScreen(path);
-        }
-
-        while(Changed)//dopóki nie zostane zapisany poprawnie plik lub nie nastąpi anulowanie operacji
-        {
-            QString questionWindowText;//string z różnymi wersjami odpowiedzi do zapytań
-
-            if(MainPath == "")//jeśli ścieżka jest pusta, to
-            {
-                questionWindowText = "Dane przepadną. Czy chcesz je zachować?";
-            }
-            else
-            {
-                questionWindowText = "Zachować zmiany w pliku: " + MainPath + " ?";
-            }
-
-            //wyświetlenie okna dialogowego z zapytaniami
-            QMessageBox::StandardButton Reply;//w zmiennej Reply przechowywana jest odpowiedź z okna dialogowego
-            Reply = SaveWhenClosed.question(this, "Zakończenie programu", questionWindowText);
-            if (Reply == QMessageBox::Yes)//jeśli wybrano "tak", to nastąpi zapis
-            {
-                Save();
-            }
-            else if(Reply == QMessageBox::No)//jeśli wybrano "nie", to nakończy się pytanie o ścieżkę do zapisania
-            {
-                Changed = false;
-            }
-        }
-    }
-}
-
-void MainWindow::Load()//reagująca na przycisk "wczytaj"
-{
-    if(MainPath == "")
-    {
-        LoadAs();
-    }
-    else
-    {
-        char *path = MainPath.toLocal8Bit().data();
-        LoadScreen(path);//wysłanie ścieżki do pobrania
-    }
 }
 
 void MainWindow::LoadAs()//metoda ragująca na przycik wczytaj jako
@@ -219,225 +155,26 @@ void MainWindow::LoadAs()//metoda ragująca na przycik wczytaj jako
     {
         MainPath = TempPath;//zapamiętanie głównej ścieżki
         char *path = MainPath.toLocal8Bit().data();//konwersja ścieżki do tablicy typu char (wskaźnik pierwszego elementu)
-        LoadScreen(path);//wysłanie ścieżki
     }
 }
 
-void MainWindow::LoadScreen(char * path)//metoda wczytująca z pliku całą zawartość wartości logicznych zawartych w tabeli
-{
-    long int temp_val;//pomocnicza zmienna tymczasowa przechowująca wczytane wartości
-
-    ifstream plik(path);//otwarcie pliku o podanej ścieżce
-
-    if( plik.good() == true )//jeśli udało się otworzyć plik, to
-    {
-        plik >> temp_val;
-
-        ui->Torus->setChecked(bool(temp_val));//ustawienie stanu zapętlenia
-
-
-        for( int i = 0; i < 9; ++i )
-        {
-            plik >> temp_val;
-
-            SettingsWindow->setTableAlive(i, bool(temp_val));
-        }
-
-        for( int i = 0; i < 9; ++i )
-        {
-            plik >> temp_val;
-
-            SettingsWindow->setTableDead(i, bool(temp_val));
-        }
-
-        plik >> temp_val;
-
-        ui->RowChanger->setValue(temp_val);//wartości początkowe ilości kolumn
-
-        plik >> temp_val;
-
-        ui->ColumnChanger->setValue(temp_val);//wartości początkowe wierszy
-
-        plik >> temp_val;
-
-        ui->SizeFieldSlider->setValue(temp_val);//rozmiar pola tabeli
-
-        plik >> temp_val;
-
-        AliveColor.setRgb(temp_val);//kolor żywych komórek
-
-        plik >> temp_val;
-
-        DeadColor.setRgb(temp_val);//kolor martwych komórek
-
-        emit(ui->Cleaner->clicked());
-
-        disconnect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
-
-        for(int i = 0; i < ui->LifeField->rowCount(); ++i)//wczytywanie po kolei wszystkich wartości logicznych z pliku
-        {
-
-            for(int j = 0; j < ui->LifeField->columnCount(); ++j)//wczytywanie po kolei wszystkich wartości logicznych z pliku
-            {
-                plik >> temp_val;
-                if(temp_val) emit(ui->LifeField->cellEntered(i, j));//emitowanie odpowiedniego sygnału, gdy okaże się, że wartość logiczna jest prawdziwa
-            }
-        }
-        plik.close();//zampknięcie pliku po zakończeniu wczytywania danych
-
-        connect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
-
-        emit(ScreenAsk());//uaktualnianie wszystkich kwadracików na ekranie
-        setWindowTitle(TitleProj + ", Otwarty plik: " + MainPath);//wyświetlenie ścieżki w tytule programu
-        Changed = false;
-    }
-    else
-    {
-        LoadError.setText("Nie można odczytać pliku: " + MainPath + " - Spróbuj ponownie.");
-        MainPath = "";
-        if(Changed)
-        {
-            setWindowTitle("*" + TitleProj + ", Błąd odczytu!!!" );//zmiana tytułu okna gdy nastąpiła zmiana w stosunku do wcześniejszej wersji projektu
-        }
-        else
-        {
-            setWindowTitle(TitleProj + ", Błąd odczytu!!!" );//zmiana tytułu okna gdy nie nastąpiła zmiana w stosunku do wcześniejszej wersji projektu
-        }
-        LoadError.exec();//uruchomienie okienka z komunikatem o błędzie wczytania
-        Load();
-    }
-}
 
 void MainWindow::Save()//metoda reagująca na przycisk "zapisz"
 {
     if(MainPath == "")
     {
-        SaveAs();
     }
     else
     { 
-        char *path = MainPath.toLocal8Bit().data();
-        SaveScreen(path);//wysłanie ścieżki do pobrania
     }
 }
 
-void MainWindow::SaveAs()//metoda reagująca na przycisk "zapisz jako..."
-{
-    QString TempPath;//tymczasowa pomocnicza ścieżka
-    TempPath = QFileDialog::getSaveFileName(this, tr("Wybierz plik do zapisania"),"./","Plik    i życia (*.life);; Wszystkie (*)");
-    //sprawdzenie, czy rozszerzenie programu zgadza się
 
-    if (TempPath.right(5) != ".life")
-    {
-        TempPath.append(".life");
-    }
-
-    if(TempPath != "")// jeśli podana ścieżka jest różna od pustej
-    {
-        MainPath = TempPath;//zapamiętanie głównej ścieżki
-        char *path = MainPath.toLocal8Bit().data();
-        SaveScreen(path);
-    }
-}
-
-void MainWindow::SaveScreen(char * path)//metoda zapisująca do pliku całą zawartość wartości logicznych zawartych w tabeli
-{
-    ofstream plik(path, ios::out | ios::trunc);//całkowite czyszczenie pliku przed otwarciem
-
-    if( plik.good() == true )
-    {
-        plik << noboolalpha << bool(ui->Torus->checkState()) << endl;
-
-        for( int i = 0; i < 9; ++i )
-        {
-            plik << noboolalpha << bool(SettingsWindow->getTableAlive(i)) << " ";
-        }
-        plik << endl;
-
-        for( int i = 0; i < 9; ++i )
-        {
-            plik << noboolalpha << bool(SettingsWindow->getTableDead(i)) << " ";
-        }
-        plik << endl;
-
-        plik << ui->RowChanger->value() << endl;
-        plik << ui->ColumnChanger->value() << endl;
-        plik << ui->SizeFieldSlider->value() << endl;
-        plik << AliveColor.rgb() << endl;
-        plik << DeadColor.rgb() << endl;
-
-        for(int i = 0; i < ui->LifeField->rowCount(); ++i)
-        {
-            plik << endl;//nowa linia
-            for(int j = 0; j < ui->LifeField->columnCount(); ++j)
-            {
-                plik << ui->LifeField->item(i, j)->data(Qt::UserRole).toBool() << " ";//dostęp do wartości logicznych (konwersja do wartości logicznych) i zapisanie ich do pliku
-            }
-        }
-        plik.close();
-        setWindowTitle(TitleProj + ", Otwarty plik: " + MainPath);//wyświetlenie ścieżki w tytule programu
-        Changed = false;
-    }
-    else
-    {
-        SaveError.setText("Nie można zapisać pliku: " + MainPath + " - Spróbuj ponownie.");
-        MainPath = "";
-
-        if(Changed)
-        {
-            setWindowTitle("*" + TitleProj + ", Błąd zapisu!!!" );//zmiana tytułu okna gdy nastąpiła zmiana w stosunku do wcześniejszej wersji projektu
-        }
-        else
-        {
-            setWindowTitle(TitleProj + ", Błąd zapisu!!!" );//zmiana tytułu okna gdy nie nastąpiła zmiana w stosunku do wcześniejszej wersji projektu
-        }
-
-        SaveError.exec();//wyświetlenie okienka z informacją o błędzie zapisu
-        Save();
-    }
-}
-
-void MainWindow::New()
-{
-    SaveUnsaved();//wywołanie metody wykonującej szereg czynności z niezapisanym plikiem
-
-    MainPath = "";
-    emit(ui->Cleaner->clicked());
-    SetInitialValues();//ustawianie wartości początkowych
-    Changed = false;
-    setWindowTitle(TitleProj);// ustawienie początkowego tytułu programu
-}
-
-
-void MainWindow::ChangeSet()//metoda zmieniająca tytuł okna oraz wartość zmiennej changed
-{
-    if ( !Changed )//jeśli plansza jest zapisana i jeśli nowa ilość żywych elementów jest różna od poprzedniej
-    {
-        setWindowTitle("*" + windowTitle());//do tytułu dopisana jest gwiazdka na początku (tylko jedna gwiazdka, gwarantuje to zapis "jeśli stan planszy jest zapisany"
-        Changed = true;//wartość zmiennej odpowiedzialnej za stan zmienionej konfiguracji tabeli jest ustawiona na prawdziwą
-    }
-}
 
 
 //********Sloty*********
 
 
-void MainWindow::MultiStep()//slot wykonujący wiele kroków algorytmu bez wyświetlania go
-{
-    bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
-    //ui->NumberOfSteps->setEnabled(false);//wyłączenie spinboxa do wprowadzania ilości kroków
-    disconnect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
-    for(int i = 0; i < ui->NumberOfSteps->value(); ++i)
-    {
-        if(ui->LifeFeed->value()) emit(ui->Move->clicked());
-
-    }
-    //ui->NumberOfSteps->setEnabled(true);//włączenie spinboxa do wprowadzania ilości kroków
-    connect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
-    emit(ScreenAsk());
-    if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-
-}
 
 
 void MainWindow::WindowStep()//slot wnikający, czy jest uruchomiona symulacja, reagujący na działanie przycisku "Krok"
@@ -455,7 +192,6 @@ void MainWindow::SimulationToggle()//metoda włączająca, bądź wyłączająca
     {
         //ui->Cleaner->setEnabled(false);//wyłączenie przycisku wyczyść
         //ui->Generator->setEnabled(false);//wyłączenie przycisku symulacja
-        SimulationStep();//wykonanie kroku symulacji
         //TimerController.start();
     }
     else//gdy symulacja już jest zatrzymana
@@ -469,19 +205,6 @@ void MainWindow::SimulationToggle()//metoda włączająca, bądź wyłączająca
     emit(ScreenAsk());//aktualizacja wszystkich stanów kwadracików w tabeli z algorytmem
 }
 
-void MainWindow::SimulationStep()//pojedynczy krok, wywołany przez przepełnienie timera
-{
-    if(IsRunning)//gdy uruchmiona jest symulacja
-    {
-        //cout << MilisecondsPerFrame << endl;
-        //MilisecondsPerFrame = 0;
-        Timer.start(ui->SpeedDial->value());//ustawienie odliczania timera od nowa
-
-        disconnect(ui->LifeField, SIGNAL(cellEntered(int,int)), Algorithm, SLOT(ToggleCell(int, int)));//rozłączenie syngału i slotu jeśli nastąpi kliknięcie na tabelę, to zostanie podjęta akcja ożywienia lub umartwienia komórek
-        emit(DoStep());//sygnał wykonania kroku w algorytmie
-        connect(ui->LifeField, SIGNAL(cellEntered(int,int)), Algorithm, SLOT(ToggleCell(int, int)));//jeśli nastąpi kliknięcie na tabelę, to zostanie podjęta akcja ożywienia lub umartwienia komórek
-    }
-}
 
 /*void MainWindow::TimerControllerTimeout()//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
 {
@@ -495,8 +218,6 @@ void MainWindow::Generate()//metoda generująca losowe elementy na ekranie
     bool done = false;//zmienna logiczna informująca, czy dana wartość została przyjęta
     int percent = 30;//zmienna odpowiedzialna za prawdopodobieństwo wystąpienia w procentach żywego kwadracika
 
-    //okno do wprowadzania danych:
-    percent = QInputDialog::getInt(0, "Generowanie życia", "Prawdopodobieństwo populacji\nkomórki w procentach [1 - 100]:", percent, 1, 100, 1, &done, Qt::WindowStaysOnTopHint);//wywołanie okienka do wprowadzania danych
     if(done)//jeśli nie przekazano wartości, wyjdź
     {
         emit(ui->Cleaner->clicked());//czyszczenie ekranu i wartości w algorytmie
@@ -588,7 +309,6 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
     {
         if(ui->LifeField->columnWidth(i) != NewSize)ui->LifeField->setColumnWidth(i, ui->SizeFieldLcd->value());//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
     }
-    ChangeSet();//zmiana tytułu okna na tytuł z gwiazdką oraz stanu "niezapisangego" projektu
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
 }
 
@@ -664,7 +384,6 @@ void MainWindow::RowsChanged(int newRow)//utworzenie odpowiedniej wielkości wie
         ui->LifeField->setRowHeight(i, ui->SizeFieldLcd->value());//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }
     ui->ProjHeight->setMinimum(MinSizeSquare * ui->RowChanger->value());//ustawienie minimalnej wartości do rozdzielczości
-    ChangeSet();//zmiana tytułu okna na tytuł z gwiazdką oraz stanu "niezapisangego" projektu
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
@@ -686,7 +405,6 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
         ui->LifeField->setColumnWidth(i, ui->SizeFieldLcd->value());//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }    
     ui->ProjWidth->setMinimum(MinSizeSquare * ui->ColumnChanger->value());//ustawienie minimalnej wartości do rozdzielczości
-    ChangeSet();//zmiana tytułu okna na tytuł z gwiazdką oraz stanu "niezapisangego" projektu
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
@@ -695,7 +413,6 @@ void MainWindow::StatusUpdate(int life, int iterations)//funkcja aktualizująca 
 {
     static int life_temp;//zmienna statyczna przechowująca wcześniejszą ilość żywych elementów
     static int step_temp;
-    if ( life != life_temp || (step_temp != iterations)) ChangeSet();//jeśli nowa ilość żywych elementów jest różna od poprzedniej
 
     life_temp = life;//przypisanie do zmiennej statycznej nowej wartości (do późniejszego ponownego wykorzystania)
     step_temp = iterations;
@@ -736,7 +453,6 @@ void MainWindow::TorusChange(bool state)//slot przyjmujący stan zapętlania z a
     if(state) TempFont.setBold(true);//jeśli zmieniono na prawdzią, to ma być wytłuszczenia
     else TempFont.setBold(false);//jeśli zapętlanie jest wyłączone, to nie ma być wytłuszczenia
     ui->Torus->setFont(TempFont);//ustawienie czcionki
-    ChangeSet();//zmiana tytułu okna na tytuł z gwiazdką oraz stanu "niezapisangego" projektu
 }
 
 void MainWindow::on_action_Zapisz_triggered()
@@ -759,7 +475,6 @@ void MainWindow::on_actionZapisz_jako_triggered()
 {
     bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
     if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    SaveAs();
     if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
 }
 
@@ -767,14 +482,13 @@ void MainWindow::on_actionWczytaj_triggered()
 {
     bool tempState = IsRunning;//tymczasowa zmienna pamiętająca, stan włączonej symulacji
     if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    Load();
     if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
 }
 
 void MainWindow::on_action_Nowy_triggered()
 {
     if(IsRunning) emit(ui->Starter->clicked());//wewnętrzne "kliknięcie" przycisku symulacji, gdy symulacja jest aktywna
-    New();
+
 }
 
 void MainWindow::on_actionOd_wie_triggered()
@@ -791,7 +505,6 @@ void MainWindow::on_actionKolor_ywych_kom_rek_triggered()
     if(TempAliveColor != "" && TempAliveColor != AliveColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
     {
         AliveColor = TempAliveColor;//ualtualnianie koloru w zmiennej globalnej
-        ChangeSet();//zmiana tytułu okna na tytuł z gwiazdką oraz stanu "niezapisangego" projektu
         emit(ScreenAsk());//uaktualnianie koloru na ekranie
     }
     if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
@@ -805,18 +518,7 @@ void MainWindow::on_actionKo_lor_martwych_kom_rek_triggered()
     if(TempDeadColor != "" && TempDeadColor != DeadColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
     {
         DeadColor = TempDeadColor;//ualtualnianie koloru w zmiennej globalnej
-        ChangeSet();//zmiana tytułu okna na tytuł z gwiazdką oraz stanu "niezapisangego" projektu
         emit(ScreenAsk());//uaktualnianie koloru na ekranie
     }
     if(!IsRunning && tempState) emit(ui->Starter->clicked());//jeśli symulacja jest zatrzymana, należy włączyć ją z powrotem
-}
-
-void MainWindow::on_actionO_programie_triggered()
-{
-    HelpWindow->show();
-}
-
-void MainWindow::on_action_Ustawienia_zasad_triggered()
-{
-    SettingsWindow->show();
 }
