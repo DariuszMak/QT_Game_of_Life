@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Changed = false;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
 
+    Table_widget_cell_size = 2;
+
     NumberOfColumns = 128;
     NumberOfRows = 64;
 
@@ -89,12 +91,12 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
 {
     for(int i = 0; i < ui->LifeField->rowCount(); ++i)//przez wszystkie wiersze
     {
-        if(ui->LifeField->rowHeight(i) != NewSize) ui->LifeField->setRowHeight(i, 2);//aktualizowany rozmiar mowo tworzonych wierszy (jeśli inny od starego)
+        if(ui->LifeField->rowHeight(i) != NewSize) ui->LifeField->setRowHeight(i, Table_widget_cell_size);//aktualizowany rozmiar mowo tworzonych wierszy (jeśli inny od starego)
     }
 
     for(int i = 0; i < ui->LifeField->columnCount(); ++i)//przez wszystkie kolumny
     {
-        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, 2);//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
+        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
     }
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
 }
@@ -102,19 +104,8 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
 void MainWindow::ClearScreen()//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
 {
     emit(ClearAlg());//wyzerowanie stanu całej tablicy w algorytmie
-    //UpadeScreen();//aktualizacja danych na ekranie
-    //RowsChanged(0);//wyskalowanie tabeli do rozmiaru 0
-    //ColumnsChanged(0);//wyskalowanie tabeli do rozmiaru 0
-    //ColumnsChanged(ui->ColumnChanger->value());//wyskalowanie tabeli do poprzedniego rozmiaru ze skasowanymi wartościami itemów (kolorów tła)
-    //RowsChanged(ui->RowChanger->value());//wyskalowanie tabeli do poprzedniego rozmiaru ze skasowanymi wartościami itemów (kolorów tła)
     emit(ScreenAsk());//sygnał aktualizacji stanu wartośi logicznych umieszczonych w tabeli roboczej na ekranie
-    //emit(StatusAsk());//aktualizacja liczby żywych pól i iteracji
 }
-
-/*void MainWindow::UpadeScreen()//funkcja aktualizująca stan ekranu z algorytmem
-{
-    emit(ScreenAsk());
-}*/
 
 void MainWindow::SwitchField(int x, int y, bool value)//funkcja ustawiająca w tabeli odpowiedni kwadracik w zależności od przyjętej wartości logicznej
 {
@@ -167,7 +158,7 @@ void MainWindow::RowsChanged(int newRow)//utworzenie odpowiedniej wielkości wie
         {
             SwitchField(i, j, false);//domyślne ustawienie jako itema na kolor wyłączonego itema
         }
-        ui->LifeField->setRowHeight(i, 2);//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
+        ui->LifeField->setRowHeight(i, Table_widget_cell_size);//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
@@ -187,9 +178,9 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
         {
             SwitchField(j, i, false);//domyślne ustawienie jako itema na kolor wyłączonego itema
         }
-        ui->LifeField->setColumnWidth(i, 2);//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
+        ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }    
-    emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
+    emit (TidyUp());//sygnał porządkujący właściowści programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
 

@@ -59,41 +59,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_8 = QVBoxLayout()
         self.verticalLayout_8.setSpacing(6)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.horizontalLayout_11 = QHBoxLayout()
-        self.horizontalLayout_11.setSpacing(6)
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_11.addItem(self.horizontalSpacer_2)
-
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setSpacing(6)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.verticalLayout_4.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer)
-
-        self.stackedWidget = QStackedWidget(self.centralWidget)
-        self.stackedWidget.setObjectName(u"stackedWidget")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.LifeField = QTableWidget(self.centralWidget)
+        self.LifeField.setObjectName(u"LifeField")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.stackedWidget.sizePolicy().hasHeightForWidth())
-        self.stackedWidget.setSizePolicy(sizePolicy1)
-        self.stackedWidget.setMaximumSize(QSize(16777215, 16777215))
-        self.stackedWidget.setFrameShape(QFrame.Box)
-        self.stackedWidget.setLineWidth(3)
-        self.Page = QWidget()
-        self.Page.setObjectName(u"Page")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.Page.sizePolicy().hasHeightForWidth())
-        self.Page.setSizePolicy(sizePolicy2)
-        self.LifeField = QTableWidget(self.Page)
-        self.LifeField.setObjectName(u"LifeField")
-        self.LifeField.setGeometry(QRect(-60, -140, 256, 509))
+        sizePolicy1.setHeightForWidth(self.LifeField.sizePolicy().hasHeightForWidth())
+        self.LifeField.setSizePolicy(sizePolicy1)
         self.LifeField.setAutoFillBackground(False)
         self.LifeField.setFrameShape(QFrame.NoFrame)
         self.LifeField.setFrameShadow(QFrame.Sunken)
@@ -107,28 +79,13 @@ class Ui_MainWindow(object):
         self.LifeField.setRowCount(0)
         self.LifeField.setColumnCount(0)
         self.LifeField.horizontalHeader().setVisible(False)
-        self.LifeField.horizontalHeader().setDefaultSectionSize(31)
+        self.LifeField.horizontalHeader().setDefaultSectionSize(35)
         self.LifeField.verticalHeader().setVisible(False)
-        self.LifeField.verticalHeader().setDefaultSectionSize(17)
+        self.LifeField.verticalHeader().setDefaultSectionSize(21)
         self.LifeField.verticalHeader().setHighlightSections(True)
         self.LifeField.verticalHeader().setProperty("showSortIndicator", False)
-        self.stackedWidget.addWidget(self.Page)
 
-        self.verticalLayout_4.addWidget(self.stackedWidget)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_4.addItem(self.verticalSpacer_3)
-
-
-        self.horizontalLayout_11.addLayout(self.verticalLayout_4)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_11.addItem(self.horizontalSpacer)
-
-
-        self.verticalLayout_8.addLayout(self.horizontalLayout_11)
+        self.verticalLayout_8.addWidget(self.LifeField)
 
 
         self.horizontalLayout_5.addLayout(self.verticalLayout_8)
@@ -151,10 +108,6 @@ class Ui_MainWindow(object):
         self.Cleaner.setObjectName(u"Cleaner")
 
         self.verticalLayout_2.addWidget(self.Cleaner)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer_2)
 
 
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
@@ -189,9 +142,6 @@ class Ui_MainWindow(object):
         self.menuNarz_dzia.addAction(self.actionKo_lor_martwych_kom_rek)
 
         self.retranslateUi(MainWindow)
-
-        self.stackedWidget.setCurrentIndex(0)
-
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi

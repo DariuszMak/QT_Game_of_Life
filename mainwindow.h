@@ -37,6 +37,8 @@ private:
 
     ConwayAlg * Algorithm;//wskaźnik na obiekt klasy ConwayAlg
 
+    int Table_widget_cell_size;
+
     int NumberOfColumns;
     int NumberOfRows;
 

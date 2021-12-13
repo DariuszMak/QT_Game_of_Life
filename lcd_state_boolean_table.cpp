@@ -6,9 +6,6 @@ ConwayAlg::ConwayAlg()//konstruktor
 {
     Rows = 0;//obowiązująca liczba wierszy dla tablicy algorytmu
     Columns = 0;//obowiązująca liczba kolumn dla tablicy algorytmu
-    Feeds = 0;//ilość pól żywych
-    Iterations = 0;//ilość wykonanych iteracji
-    Torus = false;//zmienna odpowiedzialna za zapętlanie
     //connect(parent,)
 }
 
@@ -24,8 +21,6 @@ void ConwayAlg::ClearValues()//zerowanie wartości pól w tablicy roboczej algor
             Field[i][j] = false;//przypisanie każdemu elementowi wartości "false"
         }
     }
-    Feeds = 0;//ilość pól żywych
-    Iterations = 0;//ilość wykonanych iteracji
 }
 
 
