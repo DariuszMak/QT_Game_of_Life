@@ -31,6 +31,8 @@ void ConwayAlg::ScreenAns()//metoda przkazująca do mainwindow wszystkie wartoś
         for(int j = 0; j < Columns; ++j)//przejście przez całą tablicę
         {
             emit(ChangeItem(i, j, Field[i][j]));//przesłanie wszystkich wartości logicznych algorytmu
+
+//            std::printf(i, j);
         }
     }
 }
