@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "lcd_boolean_table.h"
+#include "lcd_state_boolean_table.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -81,6 +81,7 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
 
 void MainWindow::TidyUpScreen()//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
 {
+
 
 }
 

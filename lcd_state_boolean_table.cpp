@@ -1,4 +1,4 @@
-#include "lcd_boolean_table.h"
+#include "lcd_state_boolean_table.h"
 #include <iostream>
 
 
@@ -40,6 +40,7 @@ void ConwayAlg::ScreenAns()//metoda przkazująca do mainwindow wszystkie wartoś
     }
 }
 
+
 void ConwayAlg::ToggleCell(int x, int y)//zmiana logiczna w tablicy roboczej algortymu.
 {
     bool set = Field[x][y];//przypisanie faktycznej wartości logicznej
@@ -56,8 +57,6 @@ void ConwayAlg::ToggleCell(int x, int y)//zmiana logiczna w tablicy roboczej alg
     }
     emit( ChangeItem(x, y, !set));//sygnał nakazujący zmienić pole w mainwindow na zgodne z wartością logiczną zanegowaną
 }
-
-
 
 void ConwayAlg::NewRows(int newRow)//funkcja ustawiająca nową ilość rzędów w algorytmie
 {
@@ -78,7 +77,6 @@ void ConwayAlg::NewRows(int newRow)//funkcja ustawiająca nową ilość rzędów
     }
 
     Rows = newRow; //zapis nowej wartości ilości wierszy do swojego pola
-
     emit(NewRowsInf(newRow));//emisja sygnału do mainwindow informująca o zmianie rozmiaru obszaru działania (kolumny)
 }
 

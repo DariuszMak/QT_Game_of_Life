@@ -16,7 +16,7 @@ using namespace std;
 #include <QTimer>
 
 #include <QCloseEvent>
-#include "lcd_boolean_table.h"
+#include "lcd_state_boolean_table.h"
 #include "ui_mainwindow.h"
 
 
