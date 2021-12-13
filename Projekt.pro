@@ -19,8 +19,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     lcd_state_boolean_table.h
 
-FORMS    += mainwindow.ui \
-    testable_form_widget_ui.ui
+FORMS    += mainwindow.ui
 
 DISTFILES += \
     Projekt.pro.user

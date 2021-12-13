@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Changed = false;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
 
-    Table_widget_cell_size = 2;
+    Table_widget_cell_size = 1;
 
     NumberOfColumns = 128;
     NumberOfRows = 64;
@@ -17,7 +17,13 @@ MainWindow::MainWindow(QWidget *parent) :
     Algorithm = new ConwayAlg();//utworzenie nowego obiektu z klasy ConwayAlg
     ui->setupUi(this);
 
-    MinSizeSquare = 3;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
+
+    QFont font = ui->LifeField->font();
+    font.setPointSize(1);
+    ui->LifeField->setFont(font);
+
+
+    MinSizeSquare = 1;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
     connect(Algorithm, SIGNAL(NewColumnsInf(int)), this, SLOT(ColumnsChanged(int)));//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości z algorytmu
     connect(Algorithm, SIGNAL(NewRowsInf(int)), this, SLOT(RowsChanged(int)));//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości z algorytmu
@@ -30,8 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(DoStep()), Algorithm, SLOT(Step()));//jeśli kliknie się na przycisk "krok" następuje pojedyncza iteracja algorytmu
     connect(this, SIGNAL(TidyUp()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
-
-    connect(Algorithm, SIGNAL(TorusStateInf(bool)), this, SLOT(TorusChange(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
 
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
 
@@ -79,12 +83,9 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     //++MilisecondsPerFrame;
 }*/
 
-
-
 void MainWindow::TidyUpScreen()//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
 {
-
-
+    std::printf("Tidy up screen invoked. \n");
 }
 
 void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedynczego pola na ekranie skalująca całą tabelę
