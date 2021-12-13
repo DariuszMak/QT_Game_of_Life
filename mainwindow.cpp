@@ -17,31 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     MinSizeSquare = 3;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
-    //ustawienia komunikatu błędu zapisu
-    SaveError.setWindowFlags(Qt::WindowStaysOnTopHint);//okno zawsze na wierzchu
-    SaveError.setWindowTitle("Błąd zapisu!");
-    SaveError.setIcon(QMessageBox::Critical);
-
-    //ustawienia komunikatu błędu odczytu
-    LoadError.setWindowFlags(Qt::WindowStaysOnTopHint);//okno zawsze na wierzchu
-    LoadError.setWindowTitle("Błąd odczytu!");
-    LoadError.setIcon(QMessageBox::Critical);
-
-    //ustawienia komunikatu z zapytaniem, czy zachować niezapisane dane
-    SaveWhenClosed.setWindowFlags(Qt::WindowStaysOnTopHint);//okno zawsze na wierzchu
-    SaveWhenClosed.setIcon(QMessageBox::Question);
-    SaveWhenClosed.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    SaveWhenClosed.setDefaultButton(QMessageBox::Yes);
-
-    //ustawienia komunikat informujący o zapisaniu w domyślnej lokalizacji zapisu
-    WillBeSaved.setWindowFlags(Qt::WindowStaysOnTopHint);//okno zawsze na wierzchu
-    WillBeSaved.setWindowTitle("Nastąpi zapisanie danych...");
-    WillBeSaved.setIcon(QMessageBox::Information);
-    WillBeSaved.setText("Dane zostaną zapisane do pliku o ścieżce: " + UnsavePath);
-
-
-//    connect(ui->ColumnChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewColumns(int)));//jeśli wartość z pola do wprowadzania ilości kolumn zmieniła się, to należy zaktualizować ilośc kolumn na ekranie (później też w algortymie przez sygnał NewCols())
-//    connect(ui->RowChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewRows(int)));//jeśli wartość z pola do wprowadzania ilości wierszy zmieniła się, to należy zaktualizować ilośc wierszy na ekranie (później też w algortymie przez sygnał NewRows())
     connect(Algorithm, SIGNAL(NewColumnsInf(int)), this, SLOT(ColumnsChanged(int)));//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości z algorytmu
     connect(Algorithm, SIGNAL(NewRowsInf(int)), this, SLOT(RowsChanged(int)));//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości z algorytmu
     connect(Algorithm, SIGNAL(ActualStatusInf(int,int)), this, SLOT(StatusUpdate(int,int)));//aktualny stan ilości żywych komórek oraz iteracji przekazany do mainwindow
@@ -52,10 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this,SIGNAL(ScreenAsk()), Algorithm, SLOT(ScreenAns()));//po zapytaniu algorytmu na ekran zostaną przesłane wszystkie wartości logiczne prawdziwe
 
     connect(this, SIGNAL(DoStep()), Algorithm, SLOT(Step()));//jeśli kliknie się na przycisk "krok" następuje pojedyncza iteracja algorytmu
-
-//    connect(ui->SizeFieldSlider, SIGNAL(valueChanged(int)), this, SLOT(ResizeField(int)));//gdy zostanie przesunięty suwak z wartością
     connect(this, SIGNAL(TidyUp()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
-//    connect(ui->SetWholeScreen, SIGNAL(toggled(bool)), this, SLOT(SettingSize(bool)));//jeśli zmieniono wartość opcji dostępu do zmiany rozmiaru elementów w tabeli
 
     connect(Algorithm, SIGNAL(TorusStateInf(bool)), this, SLOT(TorusChange(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
 

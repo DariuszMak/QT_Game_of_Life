@@ -40,7 +40,6 @@ private:
     int NumberOfColumns;
     int NumberOfRows;
 
-
     bool IsRunning;//zmienna wyznaczająca, czy symulacja trwa, czy nie
     bool Changed;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
     QTimer Timer;//timer wykorzystany do animacji
@@ -51,31 +50,13 @@ private:
     int MinSizeSquare;//zmienna przechowująca najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
     QString TitleProj;//zmienna typu string przechowująca tytuł całego projektu
-    QString MainPath;//główna ścieżka dostępu do pliku przechowywana w programie
-    QString UnsavePath;//zmienna typu string przechowująca ścieżkę do niezapisanego pliku
 
     QColorDialog ChooseAliveColor;//okno dialogowe wyboru koloru dla żywych kwadracików
     QColorDialog ChooseDeadColor;//okno dialogowe wyboru koloru dla martwych kwadracików
     QColor AliveColor;//zmienna przechowująca kolor żywych kwadracików
     QColor DeadColor;//zmienna przechowująca kolor martwych kwadracików
 
-    QMessageBox SaveError;//komunikat błędu zapisu
-    QMessageBox LoadError;//komunikat błędu odczytu
-    QMessageBox SaveWhenClosed;//komunikat z zapytaniem, czy zapisać plik przed wyjściem z programu
-    QMessageBox WillBeSaved;//komunikat informujący o zapisaniu w domyślnej lokalizacji zapisu
-    QMessageBox CloseWindow;//komunikat py
-
-    void SaveScreen(char*);//metoda zapisująca do pliku całą zawartość wartości logicznych zawartych w tabeli
-    void LoadScreen(char*);//metoda wczytująca z pliku całą zawartość wartości logicznych zawartych w tabeli
-
-    void SaveUnsaved();//metoda pytająca, czy zapisać niezapisany plik
     void SetInitialValues();//metoda ustawiająca wszystkie niezbędne wartości początkowe (rozmiar, ilość kolumn i wierszy na interfejsie, domyślne kolory)
-
-    void Load();//reagująca na przycisk "wczytaj"
-    void LoadAs();//metoda ragująca na przycik wczytaj jako
-    void Save();//metoda reagująca na przycisk "zapisz"
-    void SaveAs();//metoda reagująca na przycisk "zapisz jako..."
-    void New();//metoda reagująca na przycisk "nowy"
 
     void ChangeSet();//metoda zmieniająca tytuł okna oraz wartość zmiennej changed
 
