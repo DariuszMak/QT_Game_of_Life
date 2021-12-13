@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "conwayalg.h"
+#include "lcd_boolean_table.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -71,7 +71,6 @@ MainWindow::~MainWindow()//destruktor okna MainWindow
 {
     delete ui;
 }
-
 
 
 //********Prywatne metody*********

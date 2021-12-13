@@ -1,4 +1,4 @@
-#include "conwayalg.h"
+#include "lcd_boolean_table.h"
 #include <iostream>
 
 

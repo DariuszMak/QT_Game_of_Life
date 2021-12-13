@@ -13,11 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        conwayalg.cpp \
+        lcd_boolean_table.cpp \
         mainwindow.cpp
 
 HEADERS  += mainwindow.h \
-    conwayalg.h
+    lcd_boolean_table.h
 
 FORMS    += mainwindow.ui
 
