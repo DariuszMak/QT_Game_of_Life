@@ -37,6 +37,9 @@ private:
 
     ConwayAlg * Algorithm;//wskaźnik na obiekt klasy ConwayAlg
 
+    int NumberOfColumns;
+    int NumberOfRows;
+
 
     bool IsRunning;//zmienna wyznaczająca, czy symulacja trwa, czy nie
     bool Changed;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
@@ -88,7 +91,6 @@ private slots:
     void ClearScreen();//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
     void ResizeField(int);//funkcja przyjmująca rozmiar pojedynczego pola na ekranie
     void TidyUpScreen();//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
-    void SettingSize(bool);//Slot włączający lub wyłączający dostęp do elementów zmiany rozmiaru
     //void TimerControllerTimeout();//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
 
 
@@ -104,7 +106,6 @@ signals:
     void ScreenAsk();//zapytanie o wszystkie wartości prawdziwe w tablicy roboczej algorytmu
     void ClearAlg(); //zerowanie zawartości tablicy roboczej algorytmu
     void TidyUp();//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
-    void DoStep();//sygnał wykonania kroku w algorytmie
     void CloseOtherWindows();//sygnał zamknięcia innych okien
 };
 

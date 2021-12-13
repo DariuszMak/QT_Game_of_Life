@@ -7,6 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)//konstruktor MainWindow
 {
+    Changed = false;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
+
+    NumberOfColumns = 128;
+    NumberOfRows = 64;
+
     Algorithm = new ConwayAlg();//utworzenie nowego obiektu z klasy ConwayAlg
     ui->setupUi(this);
 
@@ -35,11 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     WillBeSaved.setText("Dane zostaną zapisane do pliku o ścieżce: " + UnsavePath);
 
 
-    connect(ui->ColumnChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewColumns(int)));//jeśli wartość z pola do wprowadzania ilości kolumn zmieniła się, to należy zaktualizować ilośc kolumn na ekranie (później też w algortymie przez sygnał NewCols())
-    connect(ui->RowChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewRows(int)));//jeśli wartość z pola do wprowadzania ilości wierszy zmieniła się, to należy zaktualizować ilośc wierszy na ekranie (później też w algortymie przez sygnał NewRows())
+//    connect(ui->ColumnChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewColumns(int)));//jeśli wartość z pola do wprowadzania ilości kolumn zmieniła się, to należy zaktualizować ilośc kolumn na ekranie (później też w algortymie przez sygnał NewCols())
+//    connect(ui->RowChanger, SIGNAL(valueChanged(int)), Algorithm, SLOT(NewRows(int)));//jeśli wartość z pola do wprowadzania ilości wierszy zmieniła się, to należy zaktualizować ilośc wierszy na ekranie (później też w algortymie przez sygnał NewRows())
     connect(Algorithm, SIGNAL(NewColumnsInf(int)), this, SLOT(ColumnsChanged(int)));//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości z algorytmu
     connect(Algorithm, SIGNAL(NewRowsInf(int)), this, SLOT(RowsChanged(int)));//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości z algorytmu
-    connect(this, SIGNAL(StatusAsk()), Algorithm, SLOT(StatusAns()));//wysłanie zapytania o ilość żywych elementów oraz wykonanych iteracji
     connect(Algorithm, SIGNAL(ActualStatusInf(int,int)), this, SLOT(StatusUpdate(int,int)));//aktualny stan ilości żywych komórek oraz iteracji przekazany do mainwindow
     connect(ui->LifeField, SIGNAL(cellEntered(int,int)), Algorithm, SLOT(ToggleCell(int,int)));//jeśli nastąpi kliknięcie na tabelę, to zostanie podjęta akcja ożywienia lub umartwienia komórek
     connect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
@@ -49,16 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(DoStep()), Algorithm, SLOT(Step()));//jeśli kliknie się na przycisk "krok" następuje pojedyncza iteracja algorytmu
 
-    connect(ui->SizeFieldSlider, SIGNAL(valueChanged(int)), this, SLOT(ResizeField(int)));//gdy zostanie przesunięty suwak z wartością
+//    connect(ui->SizeFieldSlider, SIGNAL(valueChanged(int)), this, SLOT(ResizeField(int)));//gdy zostanie przesunięty suwak z wartością
     connect(this, SIGNAL(TidyUp()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
-    connect(ui->SetWholeScreen, SIGNAL(toggled(bool)), this, SLOT(SettingSize(bool)));//jeśli zmieniono wartość opcji dostępu do zmiany rozmiaru elementów w tabeli
-
-
-
-    //connect(&TimerController, SIGNAL(timeout()), this, SLOT(TimerControllerTimeout()));//połączenie przekroczenia wartości timera kontrolującego, wywołuje jego slot
-    connect(ui->ProjWidth, SIGNAL(valueChanged(int)), this, SLOT(TidyUpScreen()));//jeśli zmieni się wartość dostępnej przestrzeni rozdzielczości, trzeba to uwzględnić na ekranie
-    connect(ui->ProjHeight, SIGNAL(valueChanged(int)), this, SLOT(TidyUpScreen()));//jeśli zmieni się wartość dostępnej przestrzeni rozdzielczości, trzeba to uwzględnić na ekranie
-    connect(ui->MaxSize, SIGNAL(toggled(bool)), this, SLOT(TidyUpScreen()));//gdy zostanie zaznaczona opcja maksymalnego rozmiaru, trzeba to uwzględnić na ekranie
+//    connect(ui->SetWholeScreen, SIGNAL(toggled(bool)), this, SLOT(SettingSize(bool)));//jeśli zmieniono wartość opcji dostępu do zmiany rozmiaru elementów w tabeli
 
     connect(Algorithm, SIGNAL(TorusStateInf(bool)), this, SLOT(TorusChange(bool)));//gdy zostanie zaznaczona opcja "zapętlanie", wywoła się funkcja w algorytmie zminiająca zmienną logiczną
 
@@ -66,7 +63,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     SetInitialValues();//ustawienie wartości początkowych
 
-    Changed = false;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
 //    setWindowTitle(TitleProj);// ustawienie początkowego tytułu programu
     //Load();//otwarcie domyślnej ścieżki pliku
 }
@@ -97,10 +93,8 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     AliveColor = QColor("yellow");//przypisanie kwadracikom żywym koloru żółtego
     DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
 
-    ui->ProjWidth->setValue(1280);
-    ui->ProjHeight->setValue(640);
-    ui->ColumnChanger->setValue(128);
-    ui->RowChanger->setValue(64);
+    Algorithm->NewColumns(NumberOfColumns);
+    Algorithm->NewRows(NumberOfRows);
 }
 
 
@@ -113,81 +107,22 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
 }*/
 
 
-void MainWindow::SettingSize(bool val)//slot włączający lub wyłączający dostęp do elementów zmiany rozmiaru
-{
-    ui->ColumnChanger->setEnabled(val);//ilość kolumn aktywna/nieaktywna
-    ui->RowChanger->setEnabled(val);//ilość wierszy aktywna/nieaktywna
-    ui->SizeFieldLcd->setEnabled(val);//wyświetlacz z rozmiarem aktywny/nieaktywny
-    if(ui->MaxSize->checkState())//jeśli utrzymywanie maksymalnego rozmiaru jest aktywne, należy
-    {
-        ui->SizeFieldSlider->setEnabled(false);//wyłączenie aktywności suwaka rozmiaru
-    }
-    else ui->SizeFieldSlider->setEnabled(val);//suwak rozmiaru aktywny/nieaktywny
-}
 
 void MainWindow::TidyUpScreen()//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
 {
-    int Size;//zmienna pomocnicza wykorzystywana wielokrotnie w tej funkcji
 
-    int MinSizeColumn;//wartość najmniejszego rozmiaru kwadracika dla kolumn
-
-    int MinSizeRow;//wartość najmniejszego rozmiaru kwadracika dla wierszy
-
-    MinSizeColumn = ui->ProjWidth->value() / ui->ColumnChanger->value();//obliczenie wartości najmniejszego rozmiaru kwadracika dla kolumn
-    MinSizeRow = ui->ProjHeight->value() / ui->RowChanger->value();//obliczenie wartości najmniejszego rozmiaru kwadracika dla wierszy
-
-    if(MinSizeColumn < MinSizeRow) Size = MinSizeColumn;//brana jest pod uwagę najmniejsza wartość
-    else Size = MinSizeRow;//brana jest pod uwagę najmniejsza wartość
-
-
-    if(Size < MinSizeSquare) Size = MinSizeSquare;//rozmiar MinSizeSquare jest najmniejszym dopuszczalnym rozmiarem kwadracikiem
-
-    ui->SizeFieldSlider->setMaximum(Size);//ustawienie wartości maksymalnej suwaka z rozmiarem
-
-
-    if(ui->MaxSize->checkState())//jeśli zaznaczona jest opcja dopasowania największego rozmiaru
-    {
-         ui->SizeFieldSlider->setValue(Size);//ustawiana jest taka właśnie wartość
-    }
-
-    Size = ui->SizeFieldLcd->value();//wartość w wyświetlaczu rozmiaru (ta, która obowiązuje, może się nie zmieniać, gdzy nie jest zaznaczona opcja dopasowywania rozmiaru)
-
-    int tempWidth = Size * ui->ColumnChanger->value();//tymczasowa obliczona szerokość tabeli z polami
-    int tempHeight = Size * ui->RowChanger->value();//tymczasowa obliczona wysokość tabeli z polami
-
-
-    //Uwaga!!! w poniższym skalowaniu niezbędne jest ustawienie zarówno wartości minimanych, jak i maksymalnych (funkcja resize nie działa zgodnie z oczekiwaniami)
-
-    ui->Page->setMinimumSize(ui->ProjWidth->value(), ui->ProjHeight->value());//skalowanie obszaru z ramką jako pole dostępne w pikselach - wartości minimalne
-    ui->Page->setMaximumSize(ui->ProjWidth->value(), ui->ProjHeight->value());//skalowanie obszaru z ramką jako pole dostępne w pikselach - wartości maksymalne
-    ui->Page->setMinimumHeight(ui->ProjHeight->value());
-    ui->Page->setMinimumWidth(ui->ProjWidth->value());
-    ui->Page->setMaximumHeight(ui->ProjHeight->value());
-    ui->Page->setMaximumWidth(ui->ProjWidth->value());
-
-    if(tempWidth < 300) tempWidth = 300;
-
-
-    ui->LifeField->setMinimumSize(tempWidth, tempHeight);//skalowanie tabeli - wartości minimalne
-    ui->LifeField->setMaximumSize(tempWidth, tempHeight);//skalowanie tabeli - wartości maksymalne
-
-    ui->LifeField->move((ui->Page->width() - tempWidth)/2, (ui->Page->height() - tempHeight)/2);//obliczana na bieżąco pozycja tabeli w stackedboxie
-
-    emit(ui->SetWholeScreen->toggled(ui->SetWholeScreen->checkState()));//uaktualnienie panelu bocznego do zmian parametrów rozmiaru tabeli i rozmiaru w pikselach, aby suwak był aktywny, bądź nie
 }
 
 void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedynczego pola na ekranie skalująca całą tabelę
 {
-    ui->SizeFieldLcd->display(NewSize);//wprowadzenie do wyświetlacza z rozmiarem wartości
-
     for(int i = 0; i < ui->LifeField->rowCount(); ++i)//przez wszystkie wiersze
     {
-        if(ui->LifeField->rowHeight(i) != NewSize) ui->LifeField->setRowHeight(i, ui->SizeFieldLcd->value());//aktualizowany rozmiar mowo tworzonych wierszy (jeśli inny od starego)
+        if(ui->LifeField->rowHeight(i) != NewSize) ui->LifeField->setRowHeight(i, 2);//aktualizowany rozmiar mowo tworzonych wierszy (jeśli inny od starego)
     }
 
     for(int i = 0; i < ui->LifeField->columnCount(); ++i)//przez wszystkie kolumny
     {
-        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, ui->SizeFieldLcd->value());//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
+        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, 2);//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
     }
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
 }
@@ -260,9 +195,8 @@ void MainWindow::RowsChanged(int newRow)//utworzenie odpowiedniej wielkości wie
         {
             SwitchField(i, j, false);//domyślne ustawienie jako itema na kolor wyłączonego itema
         }
-        ui->LifeField->setRowHeight(i, ui->SizeFieldLcd->value());//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
+        ui->LifeField->setRowHeight(i, 2);//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }
-    ui->ProjHeight->setMinimum(MinSizeSquare * ui->RowChanger->value());//ustawienie minimalnej wartości do rozdzielczości
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
@@ -281,9 +215,8 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
         {
             SwitchField(j, i, false);//domyślne ustawienie jako itema na kolor wyłączonego itema
         }
-        ui->LifeField->setColumnWidth(i, ui->SizeFieldLcd->value());//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
+        ui->LifeField->setColumnWidth(i, 2);//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }    
-    ui->ProjWidth->setMinimum(MinSizeSquare * ui->ColumnChanger->value());//ustawienie minimalnej wartości do rozdzielczości
     emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
