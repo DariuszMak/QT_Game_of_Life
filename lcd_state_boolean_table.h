@@ -15,9 +15,6 @@ public:
 private:
     int Rows;//obowiĂ„â€¦zujĂ„â€¦ca liczba wierszy dla tablicy algorytmu
     int Columns;//obowiĂ„â€¦zujĂ„â€¦ca liczba kolumn dla tablicy algorytmu
-    int Feeds;//iloÄąâ€şĂ„â€ˇ pÄ‚Ĺ‚l ÄąÄ˝ywych
-    int Iterations;//iloÄąâ€şĂ„â€ˇ wykonanych iteracji
-    bool Torus;//zmienna odpowiedzialna za zapĂ„â„˘tlanie
 
     QVector< QVector<bool> > Field;//wektor w wektorze, tablica dwuwymiarowa na ktÄ‚Ĺ‚rej dziaÄąâ€šamy w algorytmie
 
