@@ -37,6 +37,8 @@ private:
     int Table_widget_cell_size;
     int LCDDataBufferSize;
 
+    uint8_t LCDDataBuffer[1024] { 0 };
+
     int NumberOfColumns;
     int NumberOfRows;
 

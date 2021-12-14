@@ -8,8 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Table_widget_cell_size = 1;
 
-    uint8_t LCDDataBuffer[1024] = { 0 };
-
     for (unsigned int i = 0; i < 1024; i++)
     {
         if (i == 3){
@@ -22,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
         std::cout << i << ": " << LCDDataBuffer[i] << std::endl;
     }
-
-    this->printBuffer(LCDDataBuffer);
 
     NumberOfColumns = 128;
     NumberOfRows = 64;
@@ -78,6 +74,7 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     this->RowsChanged(this->NumberOfRows);
     this->ColumnsChanged(this->NumberOfColumns);
 
+    this->printBuffer(this->LCDDataBuffer);
 }
 
 
