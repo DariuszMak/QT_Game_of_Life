@@ -16,7 +16,6 @@ using namespace std;
 #include <QTimer>
 
 #include <QCloseEvent>
-#include "lcd_state_boolean_table.h"
 #include "ui_mainwindow.h"
 
 
@@ -34,8 +33,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
-    LCD_state_boolean_table * Algorithm;//wskaźnik na obiekt klasy ConwayAlg
 
     int Table_widget_cell_size;
 
@@ -67,6 +64,10 @@ private slots:
     void ClearScreen();//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
     void ResizeField(int);//funkcja przyjmująca rozmiar pojedynczego pola na ekranie
     void TidyUpScreen();//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
+    void DisplayAccordingToBuffer(uint8_t * const);
+
+    void printBuffer(uint8_t * const);
+
     //void TimerControllerTimeout();//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
 
 
@@ -82,6 +83,7 @@ signals:
     void ClearAlg(); //zerowanie zawartości tablicy roboczej algorytmu
     void Refresh_fields_state();//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     void CloseOtherWindows();//sygnał zamknięcia innych okien
+    void LcdBufferModified();
 };
 
 #endif // MAINWINDOW_H

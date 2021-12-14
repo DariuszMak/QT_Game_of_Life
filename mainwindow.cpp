@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "lcd_state_boolean_table.h"
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,32 +10,18 @@ MainWindow::MainWindow(QWidget *parent) :
     NumberOfColumns = 128;
     NumberOfRows = 64;
 
-    Algorithm = new LCD_state_boolean_table();//utworzenie nowego obiektu z klasy ConwayAlg
     ui->setupUi(this);
-
-
-    QFont font = ui->LifeField->font();
-    font.setPointSize(1);
-    ui->LifeField->setFont(font);
-
-    this->setMinimumSize(QSize(1800, 700));
 
     MinSizeSquare = 1;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
-    connect(Algorithm, SIGNAL(NewColumnsInf(int)), this, SLOT(ColumnsChanged(int)));//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości z algorytmu
-    connect(Algorithm, SIGNAL(NewRowsInf(int)), this, SLOT(RowsChanged(int)));//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości z algorytmu
-    connect(ui->LifeField, SIGNAL(cellEntered(int,int)), Algorithm, SLOT(ToggleCell(int,int)));//jeśli nastąpi kliknięcie na tabelę, to zostanie podjęta akcja ożywienia lub umartwienia komórek
-    connect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
     connect(ui->Cleaner, SIGNAL(clicked()), this, SLOT(ClearScreen()));//jeśli kliknięto na przycisk "wyczyść", to nastąpi wyczyszczenie ekranu
 
-    connect(this, SIGNAL(ClearAlg()), Algorithm, SLOT(ClearValues()));//czyszczenie wszystkich wartości w tablicy roboczej algorytmu
-    connect(this, SIGNAL(ScreenAsk()), Algorithm, SLOT(ScreenAns()));//po zapytaniu algorytmu na ekran zostaną przesłane wszystkie wartości logiczne prawdziwe
 
-    connect(this, SIGNAL(DoStep()), Algorithm, SLOT(Step()));//jeśli kliknie się na przycisk "krok" następuje pojedyncza iteracja algorytmu
+//    connect(, SIGNAL(), ,SLOT());
+//    connect(this, SIGNAL(LCDBufferModified()), this, SLOT());
+
     connect(this, SIGNAL(Refresh_fields_state()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
-
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
-
     SetInitialValues();//ustawienie wartości początkowych
 }
 
@@ -63,20 +47,39 @@ void MainWindow::closeEvent(QCloseEvent *event)//specjalna metoda do przedefiniw
 
 void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wartości początkowe (rozmiar, ilość kolumn i wierszy na interfejsie, domyślne kolory)
 {
+    QFont font = ui->LifeField->font();
+    font.setPointSize(1);
+    ui->LifeField->setFont(font);
+
+    this->setMinimumSize(QSize(1800, 700));
+
+
     AliveColor = QColor("yellow");//przypisanie kwadracikom żywym koloru żółtego
     DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
 
-    Algorithm->NewColumns(NumberOfColumns);
-    Algorithm->NewRows(NumberOfRows);
+    this->RowsChanged(this->NumberOfRows);
+    this->ColumnsChanged(this->NumberOfColumns);
+
 }
 
 
 //********Sloty*********
 
 
+void MainWindow::printBuffer(uint8_t * const displayBuffer)
+{
+    this->DisplayAccordingToBuffer(displayBuffer);
+}
+
+
+void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
+{
+    std::printf("DisplayAccordingToBuffer invoked");
+}
+
+
 void MainWindow::TidyUpScreen()
 {
-
     std::printf("Tidy up screen invoked. \n");
 }
 

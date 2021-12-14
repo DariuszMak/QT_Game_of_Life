@@ -13,11 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        lcd_state_boolean_table.cpp \
         mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    lcd_state_boolean_table.h
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
