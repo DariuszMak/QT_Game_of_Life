@@ -14,6 +14,10 @@ MainWindow::MainWindow(QWidget *parent) :
             LCDDataBuffer[i] = 0x03;
         }
 
+        if (i == 128){
+            LCDDataBuffer[i] = 0xff;
+        }
+
         if (i == 1023){
             LCDDataBuffer[i] = 0xf0;
         }
@@ -102,10 +106,9 @@ void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 
             for(int byte_number = 0; byte_number < 8; ++byte_number) {
                 bool logical_value = ((byte_from_buffer >> byte_number)  & 0x01);
-
                 int y_coordinate_for_widget = (y * 8) + byte_number;
 
-                cout << "y: " << y << ", x: " << x << ", buffer_index: " << buffer_index << ", byte_from_buffer: " << byte_from_buffer << ", y_coordinate_for_widget: " << y_coordinate_for_widget << ", boolean_value: " << logical_value<< endl;
+//                cout << "y: " << y << ", x: " << x << ", buffer_index: " << buffer_index << ", byte_from_buffer: " << byte_from_buffer << ", y_coordinate_for_widget: " << y_coordinate_for_widget << ", boolean_value: " << logical_value<< endl;
 
                 emit(this->SwitchField(y_coordinate_for_widget, x, logical_value));//przesłanie wszystkich wartości logicznych algorytmu
             }
@@ -135,7 +138,6 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
 void MainWindow::ClearScreen()//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
 {
     emit(ClearAlg());//wyzerowanie stanu całej tablicy w algorytmie
-    emit(ScreenAsk());//sygnał aktualizacji stanu wartośi logicznych umieszczonych w tabeli roboczej na ekranie
 }
 
 void MainWindow::SwitchField(int x, int y, bool value)//funkcja ustawiająca w tabeli odpowiedni kwadracik w zależności od przyjętej wartości logicznej
@@ -192,7 +194,6 @@ void MainWindow::RowsChanged(int newRow)//utworzenie odpowiedniej wielkości wie
         ui->LifeField->setRowHeight(i, Table_widget_cell_size);//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }
     emit(Refresh_fields_state());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
-    emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
 
 void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości
@@ -212,5 +213,4 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
         ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }    
     emit (Refresh_fields_state());//sygnał porządkujący właściowści programu w celu uzyskania maksymalnej spójności
-    emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
