@@ -35,6 +35,7 @@ private:
     Ui::MainWindow *ui;
 
     int Table_widget_cell_size;
+    int LCDDataBufferSize;
 
     int NumberOfColumns;
     int NumberOfRows;
@@ -67,15 +68,6 @@ private slots:
     void DisplayAccordingToBuffer(uint8_t * const);
 
     void printBuffer(uint8_t * const);
-
-    //void TimerControllerTimeout();//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
-
-
-    void on_actionOd_wie_triggered();
-
-    void on_actionKolor_ywych_kom_rek_triggered();
-
-    void on_actionKo_lor_martwych_kom_rek_triggered();
 
 signals:
     void StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji

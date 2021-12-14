@@ -96,13 +96,13 @@
            <bool>false</bool>
           </attribute>
           <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>35</number>
+           <number>107</number>
           </attribute>
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
           </attribute>
           <attribute name="verticalHeaderDefaultSectionSize">
-           <number>21</number>
+           <number>58</number>
           </attribute>
           <attribute name="verticalHeaderHighlightSections">
            <bool>true</bool>
@@ -162,15 +162,6 @@
      <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuNarz_dzia">
-    <property name="title">
-     <string>&amp;Narzędzia</string>
-    </property>
-    <addaction name="actionOd_wie"/>
-    <addaction name="actionKolor_ywych_kom_rek"/>
-    <addaction name="actionKo_lor_martwych_kom_rek"/>
-   </widget>
-   <addaction name="menuNarz_dzia"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionWczytaj_jako">

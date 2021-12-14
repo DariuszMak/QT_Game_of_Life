@@ -82,9 +82,9 @@ class Ui_MainWindow(object):
         self.LifeField.setRowCount(0)
         self.LifeField.setColumnCount(0)
         self.LifeField.horizontalHeader().setVisible(False)
-        self.LifeField.horizontalHeader().setDefaultSectionSize(35)
+        self.LifeField.horizontalHeader().setDefaultSectionSize(107)
         self.LifeField.verticalHeader().setVisible(False)
-        self.LifeField.verticalHeader().setDefaultSectionSize(21)
+        self.LifeField.verticalHeader().setDefaultSectionSize(58)
         self.LifeField.verticalHeader().setHighlightSections(True)
         self.LifeField.verticalHeader().setProperty("showSortIndicator", False)
 
@@ -132,17 +132,10 @@ class Ui_MainWindow(object):
         self.menuBar = QMenuBar(MainWindow)
         self.menuBar.setObjectName(u"menuBar")
         self.menuBar.setGeometry(QRect(0, 0, 1113, 20))
-        self.menuNarz_dzia = QMenu(self.menuBar)
-        self.menuNarz_dzia.setObjectName(u"menuNarz_dzia")
         MainWindow.setMenuBar(self.menuBar)
         self.statusBar = QStatusBar(MainWindow)
         self.statusBar.setObjectName(u"statusBar")
         MainWindow.setStatusBar(self.statusBar)
-
-        self.menuBar.addAction(self.menuNarz_dzia.menuAction())
-        self.menuNarz_dzia.addAction(self.actionOd_wie)
-        self.menuNarz_dzia.addAction(self.actionKolor_ywych_kom_rek)
-        self.menuNarz_dzia.addAction(self.actionKo_lor_martwych_kom_rek)
 
         self.retranslateUi(MainWindow)
 
@@ -195,6 +188,5 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.Cleaner.setShortcut(QCoreApplication.translate("MainWindow", u"W", None))
 #endif // QT_CONFIG(shortcut)
-        self.menuNarz_dzia.setTitle(QCoreApplication.translate("MainWindow", u"&Narz\u0119dzia", None))
     # retranslateUi
 

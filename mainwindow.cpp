@@ -1,11 +1,29 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)//konstruktor MainWindow
 {
     Table_widget_cell_size = 1;
+
+    uint8_t LCDDataBuffer[1024] = { 0 };
+
+    for (unsigned int i = 0; i < 1024; i++)
+    {
+        if (i == 3){
+            LCDDataBuffer[i] = 0x5f;
+        }
+
+        if (i == 1023){
+            LCDDataBuffer[i] = 0x5f;
+        }
+
+        std::cout << i << ": " << LCDDataBuffer[i] << std::endl;
+    }
+
+    this->printBuffer(LCDDataBuffer);
 
     NumberOfColumns = 128;
     NumberOfRows = 64;
@@ -71,12 +89,12 @@ void MainWindow::printBuffer(uint8_t * const displayBuffer)
     this->DisplayAccordingToBuffer(displayBuffer);
 }
 
-
 void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 {
     std::printf("DisplayAccordingToBuffer invoked");
-}
+//    std::printf("DisplayTable");
 
+}
 
 void MainWindow::TidyUpScreen()
 {
@@ -105,7 +123,7 @@ void MainWindow::ClearScreen()//funkcja czyszcząca ekran i dane w algorytmie i 
 
 void MainWindow::SwitchField(int x, int y, bool value)//funkcja ustawiająca w tabeli odpowiedni kwadracik w zależności od przyjętej wartości logicznej
 {
-    QTableWidgetItem *item = ui->LifeField->item(x, y);//przypisanie do wskaźnika "item" adresu pola z tabeli
+    QTableWidgetItem * item = ui->LifeField->item(x, y);//przypisanie do wskaźnika "item" adresu pola z tabeli
 
     if(item == 0)//jeśli nie ma jeszcze itema, to należy go przypisać
     {
@@ -178,31 +196,4 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
     }    
     emit (Refresh_fields_state());//sygnał porządkujący właściowści programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
-}
-
-
-void MainWindow::on_actionOd_wie_triggered()
-{
-    Refresh_fields_state();
-    emit(ScreenAsk());
-}
-
-void MainWindow::on_actionKolor_ywych_kom_rek_triggered()
-{
-    QColor TempAliveColor = ChooseAliveColor.getColor(AliveColor, 0, "Wybierz kolor dla żywych komórek");
-    if(TempAliveColor != "" && TempAliveColor != AliveColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
-    {
-        AliveColor = TempAliveColor;//ualtualnianie koloru w zmiennej globalnej
-        emit(ScreenAsk());//uaktualnianie koloru na ekranie
-    }
-}
-
-void MainWindow::on_actionKo_lor_martwych_kom_rek_triggered()
-{
-    QColor TempDeadColor = ChooseDeadColor.getColor(DeadColor, 0, "Wybierz kolor dla martwych komórek");
-    if(TempDeadColor != "" && TempDeadColor != DeadColor)//jeśli kolor został wybrany i jest różny od tego w globalnej zmiennej, należy go ustawić
-    {
-        DeadColor = TempDeadColor;//ualtualnianie koloru w zmiennej globalnej
-        emit(ScreenAsk());//uaktualnianie koloru na ekranie
-    }
 }
