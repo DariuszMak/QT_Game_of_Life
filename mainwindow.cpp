@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     for (unsigned int i = 0; i < 1024; i++)
     {
-        if (i == 1){
-            LCDDataBuffer[i] = 0x01;
+        if (i == 0){
+            LCDDataBuffer[i] = 0x03;
         }
 
         if (i == 1023){
@@ -107,7 +107,7 @@ void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 
                 cout << "y: " << y << ", x: " << x << ", buffer_index: " << buffer_index << ", byte_from_buffer: " << byte_from_buffer << ", y_coordinate_for_widget: " << y_coordinate_for_widget << ", boolean_value: " << logical_value<< endl;
 
-                emit(this->SwitchField(x, y_coordinate_for_widget, logical_value));//przesłanie wszystkich wartości logicznych algorytmu
+                emit(this->SwitchField(y_coordinate_for_widget, x, logical_value));//przesłanie wszystkich wartości logicznych algorytmu
             }
         }
     }
