@@ -147,46 +147,46 @@ class Ui_MainWindow(object):
         self.actionWczytaj_jako.setText(QCoreApplication.translate("MainWindow", u"Wczyt&aj jako...", None))
 #if QT_CONFIG(shortcut)
         self.actionWczytaj_jako.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Shift+O", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.action_Zapisz.setText(QCoreApplication.translate("MainWindow", u"&Zapisz", None))
 #if QT_CONFIG(shortcut)
         self.action_Zapisz.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+S", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.actionZapisz_jako.setText(QCoreApplication.translate("MainWindow", u"Zapi&sz jako...", None))
 #if QT_CONFIG(shortcut)
         self.actionZapisz_jako.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Shift+S", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.actionWczytaj.setText(QCoreApplication.translate("MainWindow", u"&Wczytaj", None))
 #if QT_CONFIG(shortcut)
         self.actionWczytaj.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.action_Nowy.setText(QCoreApplication.translate("MainWindow", u"&Nowy", None))
 #if QT_CONFIG(shortcut)
         self.action_Nowy.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+N", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.actionOd_wie.setText(QCoreApplication.translate("MainWindow", u"Od\u015bwie\u017c", None))
 #if QT_CONFIG(shortcut)
         self.actionOd_wie.setShortcut(QCoreApplication.translate("MainWindow", u"F5", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.actionKolor_ywych_kom_rek.setText(QCoreApplication.translate("MainWindow", u"&Kolor \u017cywych kom\u00f3rek", None))
 #if QT_CONFIG(shortcut)
         self.actionKolor_ywych_kom_rek.setShortcut(QCoreApplication.translate("MainWindow", u"[", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.actionKo_lor_martwych_kom_rek.setText(QCoreApplication.translate("MainWindow", u"Ko&lor martwych kom\u00f3rek", None))
 #if QT_CONFIG(shortcut)
         self.actionKo_lor_martwych_kom_rek.setShortcut(QCoreApplication.translate("MainWindow", u"]", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.actionO_programie.setText(QCoreApplication.translate("MainWindow", u"O &programie", None))
 #if QT_CONFIG(shortcut)
         self.actionO_programie.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+H", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.action_Ustawienia_zasad.setText(QCoreApplication.translate("MainWindow", u"&Ustawienia zasad", None))
 #if QT_CONFIG(shortcut)
         self.action_Ustawienia_zasad.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+U", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
         self.Cleaner.setText(QCoreApplication.translate("MainWindow", u"Wyczy\u015b\u0107", None))
 #if QT_CONFIG(shortcut)
         self.Cleaner.setShortcut(QCoreApplication.translate("MainWindow", u"W", None))
-#endif // QT_CONFIG(shortcut)
+#endif 
     # retranslateUi
 

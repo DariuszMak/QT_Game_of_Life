@@ -4,7 +4,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)//konstruktor MainWindow
+    ui(new Ui::MainWindow)
 {
     Table_widget_cell_size = 1;
 
@@ -33,26 +33,26 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    MinSizeSquare = 1;//przypisanie wartości do zmiennej przechowującej najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
+    MinSizeSquare = 1;
 
-    connect(ui->Cleaner, SIGNAL(clicked()), this, SLOT(ClearScreen()));//jeśli kliknięto na przycisk "wyczyść", to nastąpi wyczyszczenie ekranu
+    connect(ui->Cleaner, SIGNAL(clicked()), this, SLOT(ClearScreen()));
 
 
-//    connect(, SIGNAL(), ,SLOT());
-//    connect(this, SIGNAL(LCDBufferModified()), this, SLOT());
 
-    connect(this, SIGNAL(Refresh_fields_state()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
-    srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
-    SetInitialValues();//ustawienie wartości początkowych
+
+
+    connect(this, SIGNAL(Refresh_fields_state()), this, SLOT(TidyUpScreen()));
+    srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));
+    SetInitialValues();
 }
 
-MainWindow::~MainWindow()//destruktor okna MainWindow
+MainWindow::~MainWindow()
 {
     delete ui;
 }
 
 
-//********Prywatne metody*********
+
 
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -60,13 +60,13 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     event->accept();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)//specjalna metoda do przedefiniwania działań przy zamykaniu programu
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->accept();
     emit CloseOtherWindows();
 }
 
-void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wartości początkowe (rozmiar, ilość kolumn i wierszy na interfejsie, domyślne kolory)
+void MainWindow::SetInitialValues()
 {
     QFont font = ui->LifeField->font();
     font.setPointSize(1);
@@ -75,8 +75,8 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     this->setMinimumSize(QSize(1800, 700));
 
 
-    AliveColor = QColor("yellow");//przypisanie kwadracikom żywym koloru żółtego
-    DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
+    AliveColor = QColor("yellow");
+    DeadColor = QColor("black");
 
     this->RowsChanged(this->NumberOfRowsInWidget);
     this->ColumnsChanged(this->NumberOfColumnsInWidget);
@@ -85,7 +85,7 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
 }
 
 
-//********Sloty*********
+
 
 
 void MainWindow::printBuffer(uint8_t * const displayBuffer)
@@ -99,7 +99,7 @@ void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 
     for (int y = 0; y < this->LCDNubmberOfYCoord; ++y)
     {
-        for(int x = 0; x < this->LCDNubmberOfXCoord; ++x)//przejście przez całą tablicę
+        for(int x = 0; x < this->LCDNubmberOfXCoord; ++x)
         {
             int buffer_index = (y * 128)+ x;
             int byte_from_buffer = displayBuffer[buffer_index];
@@ -108,9 +108,9 @@ void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
                 bool logical_value = ((byte_from_buffer >> byte_number)  & 0x01);
                 int y_coordinate_for_widget = (y * 8) + byte_number;
 
-//                cout << "y: " << y << ", x: " << x << ", buffer_index: " << buffer_index << ", byte_from_buffer: " << byte_from_buffer << ", y_coordinate_for_widget: " << y_coordinate_for_widget << ", boolean_value: " << logical_value<< endl;
+                cout << "y: " << y << ", x: " << x << ", buffer_index: " << buffer_index << ", byte_from_buffer: " << byte_from_buffer << ", y_coordinate_for_widget: " << y_coordinate_for_widget << ", boolean_value: " << logical_value<< endl;
 
-                emit(this->SwitchField(y_coordinate_for_widget, x, logical_value));//przesłanie wszystkich wartości logicznych algorytmu
+                emit(this->SwitchField(y_coordinate_for_widget, x, logical_value));
             }
         }
     }
@@ -121,96 +121,96 @@ void MainWindow::TidyUpScreen()
     std::printf("Tidy up screen invoked. \n");
 }
 
-void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedynczego pola na ekranie skalująca całą tabelę
+void MainWindow::ResizeField(int NewSize)
 {
-    for(int i = 0; i < ui->LifeField->rowCount(); ++i)//przez wszystkie wiersze
+    for(int i = 0; i < ui->LifeField->rowCount(); ++i)
     {
-        if(ui->LifeField->rowHeight(i) != NewSize) ui->LifeField->setRowHeight(i, Table_widget_cell_size);//aktualizowany rozmiar mowo tworzonych wierszy (jeśli inny od starego)
+        if(ui->LifeField->rowHeight(i) != NewSize) ui->LifeField->setRowHeight(i, Table_widget_cell_size);
     }
 
-    for(int i = 0; i < ui->LifeField->columnCount(); ++i)//przez wszystkie kolumny
+    for(int i = 0; i < ui->LifeField->columnCount(); ++i)
     {
-        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
+        if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, Table_widget_cell_size);
     }
-    emit(Refresh_fields_state());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
+    emit(Refresh_fields_state());
 }
 
-void MainWindow::ClearScreen()//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
+void MainWindow::ClearScreen()
 {
-    emit(ClearAlg());//wyzerowanie stanu całej tablicy w algorytmie
+    emit(ClearAlg());
 }
 
-void MainWindow::SwitchField(int x, int y, bool value)//funkcja ustawiająca w tabeli odpowiedni kwadracik w zależności od przyjętej wartości logicznej
+void MainWindow::SwitchField(int x, int y, bool value)
 {
-    QTableWidgetItem * item = ui->LifeField->item(x, y);//przypisanie do wskaźnika "item" adresu pola z tabeli
+    QTableWidgetItem * item = ui->LifeField->item(x, y);
 
-    if(item == 0)//jeśli nie ma jeszcze itema, to należy go przypisać
+    if(item == 0)
     {
-        item = new QTableWidgetItem;//utworzenie nowego elementu item i przypisanie jego adresu do wcześniej utworzonego wskaźnika
-        ui->LifeField->setItem(x, y, item);//umieszczenie tego elementu w tabeli
+        item = new QTableWidgetItem;
+        ui->LifeField->setItem(x, y, item);
     }
 
     if(value)
     {
 
-        if(item->data(Qt::UserRole) != true)//jeśli wartość logiczna w itemie jest inna od prawdziwej (może nie być żadnej)
+        if(item->data(Qt::UserRole) != true)
         {
-            item->setData(Qt::UserRole, QVariant(true));//ustawienie wartości true
+            item->setData(Qt::UserRole, QVariant(true));
         }
 
-        if(item->background() != AliveColor)//jeśli kolor się zmienił
+        if(item->background() != AliveColor)
         {
-            item->setBackground(AliveColor);//zmiana koloru tła
+            item->setBackground(AliveColor);
         }
     }
     else
     {
-        if(item->data(Qt::UserRole) != false)//jeśli wartość logiczna w itemie jest inna od fałszywej (może nie być żadnej) lub kolor się zmienił
+        if(item->data(Qt::UserRole) != false)
         {
-            item->setData(Qt::UserRole, QVariant(false));//ustawienie wartości false
+            item->setData(Qt::UserRole, QVariant(false));
         }
 
-        if(item->background() != DeadColor)//jeśli kolor się zmienił
+        if(item->background() != DeadColor)
         {
-            item->setBackground(DeadColor);//zmiana koloru tła item
+            item->setBackground(DeadColor);
         }
     }
 }
 
-void MainWindow::RowsChanged(int newRow)//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości
+void MainWindow::RowsChanged(int newRow)
 {
-    if(ui->LifeField->rowCount() == newRow) return;//gdy faktyczna ilość wierszy w tabeli jest równa z ilością zadaną, należy wyjść z metody
-    int oldRows = ui->LifeField->rowCount();//przypisanie do oldRows wartości obecnej ilości wierszy w tabeli
+    if(ui->LifeField->rowCount() == newRow) return;
+    int oldRows = ui->LifeField->rowCount();
 
-    ui->LifeField->setRowCount(newRow);//ustawienie ilości wierszy w tabeli zgodnie z ilością wprowadzoną do funcji
+    ui->LifeField->setRowCount(newRow);
 
-    //Gdy wierszy jest więcej
-    for(int i = oldRows; i < newRow; ++i)//od starej (mniejszej) ilości wierszy do nowo wprowadzonej ilości wierszy
+    
+    for(int i = oldRows; i < newRow; ++i)
     {
-        for(int j = 0; j < ui->LifeField->columnCount(); ++j)//dla każdego wiersza poruszanie się po kolumnach, aby wypełnić brakujące pola
+        for(int j = 0; j < ui->LifeField->columnCount(); ++j)
         {
-            SwitchField(i, j, false);//domyślne ustawienie jako itema na kolor wyłączonego itema
+            SwitchField(i, j, false);
         }
-        ui->LifeField->setRowHeight(i, Table_widget_cell_size);//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
+        ui->LifeField->setRowHeight(i, Table_widget_cell_size);
     }
-    emit(Refresh_fields_state());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
+    emit(Refresh_fields_state());
 }
 
-void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości
+void MainWindow::ColumnsChanged(int newCol)
 {
-    if(ui->LifeField->columnCount() == newCol) return;//gdy faktyczna ilość kolumn w tabeli jest równa z ilością zadaną, należy wyjść z metody
-    int oldColumns = ui->LifeField->columnCount();//przypisanie do oldColumns wartości obecnej ilości kolumn w tabeli
+    if(ui->LifeField->columnCount() == newCol) return;
+    int oldColumns = ui->LifeField->columnCount();
 
-    ui->LifeField->setColumnCount(newCol);//ustawienie ilości kolumn w tabeli zgodnie z ilością wprowadzoną do funcji
+    ui->LifeField->setColumnCount(newCol);
 
-    //Gdy kolumn jest więcej
-    for(int i = oldColumns; i < newCol; ++i)//od starej (mniejszej) ilości kolumn do nowo wprowadzonej ilości kolumn
+    
+    for(int i = oldColumns; i < newCol; ++i)
     {
-        for(int j = 0; j < ui->LifeField->rowCount(); ++j)//dla każdej kolumny poruszanie się po wierszach, aby wypełnić brakujące pola
+        for(int j = 0; j < ui->LifeField->rowCount(); ++j)
         {
-            SwitchField(j, i, false);//domyślne ustawienie jako itema na kolor wyłączonego itema
+            SwitchField(j, i, false);
         }
-        ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
+        ui->LifeField->setColumnWidth(i, Table_widget_cell_size);
     }    
-    emit (Refresh_fields_state());//sygnał porządkujący właściowści programu w celu uzyskania maksymalnej spójności
+    emit (Refresh_fields_state());
 }
