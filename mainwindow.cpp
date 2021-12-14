@@ -21,8 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
         std::cout << i << ": " << LCDDataBuffer[i] << std::endl;
     }
 
-    NumberOfColumns = 128;
-    NumberOfRows = 64;
+    LCDNubmberOfXCoord = 128;
+    LCDNubmberOfYCoord = 8;
+
+    NumberOfColumnsInWidget = 128;
+    NumberOfRowsInWidget = 64;
 
     ui->setupUi(this);
 
@@ -71,8 +74,8 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
     AliveColor = QColor("yellow");//przypisanie kwadracikom żywym koloru żółtego
     DeadColor = QColor("black");//przypisanie kwadracikom martwym koloru czarnego
 
-    this->RowsChanged(this->NumberOfRows);
-    this->ColumnsChanged(this->NumberOfColumns);
+    this->RowsChanged(this->NumberOfRowsInWidget);
+    this->ColumnsChanged(this->NumberOfColumnsInWidget);
 
     this->printBuffer(this->LCDDataBuffer);
 }
@@ -88,13 +91,22 @@ void MainWindow::printBuffer(uint8_t * const displayBuffer)
 
 void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 {
-    std::printf("DisplayAccordingToBuffer invoked. \n");
+    std::printf("Display According To Buffer invoked. \n");
 
-    for (int i = 0; i < this->NumberOfRows; ++i)
+    for (int y = 0; y < this->LCDNubmberOfYCoord; ++y)
     {
-        for(int j = 0; j < this->NumberOfColumns; ++j)//przejście przez całą tablicę
+        for(int x = 0; x < this->LCDNubmberOfXCoord; ++x)//przejście przez całą tablicę
         {
-//            emit(this->SwitchField(i, j, false));//przesłanie wszystkich wartości logicznych algorytmu
+            int byte_from_buffer = displayBuffer[(y * 128 )+ x];
+
+            for(int byte_number = 0; byte_number < 8; ++byte_number) {
+
+                bool logical_value = ((byte_from_buffer >> byte_number)  & 0x01);
+
+                int y_coordinate_for_widget = (x * 8) + logical_value;
+
+                emit(this->SwitchField(y, y_coordinate_for_widget, logical_value));//przesłanie wszystkich wartości logicznych algorytmu
+            }
         }
     }
 }

@@ -39,8 +39,12 @@ private:
 
     uint8_t LCDDataBuffer[1024] { 0 };
 
-    int NumberOfColumns;
-    int NumberOfRows;
+
+    int LCDNubmberOfXCoord;
+    int LCDNubmberOfYCoord;
+
+    int NumberOfColumnsInWidget;
+    int NumberOfRowsInWidget;
 
     int MinSizeSquare;//zmienna przechowująca najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 
