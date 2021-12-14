@@ -7,14 +7,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)//konstruktor MainWindow
 {
-    Changed = false;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
-
     Table_widget_cell_size = 1;
 
     NumberOfColumns = 128;
     NumberOfRows = 64;
 
-    Algorithm = new ConwayAlg();//utworzenie nowego obiektu z klasy ConwayAlg
+    Algorithm = new LCD_state_boolean_table();//utworzenie nowego obiektu z klasy ConwayAlg
     ui->setupUi(this);
 
 
@@ -76,8 +74,9 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
 //********Sloty*********
 
 
-void MainWindow::TidyUpScreen()//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
+void MainWindow::TidyUpScreen()
 {
+
     std::printf("Tidy up screen invoked. \n");
 }
 

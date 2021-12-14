@@ -2,14 +2,14 @@
 #include <iostream>
 
 
-ConwayAlg::ConwayAlg()//konstruktor
+LCD_state_boolean_table::LCD_state_boolean_table()//konstruktor
 {
     Rows = 0;//obowiązująca liczba wierszy dla tablicy algorytmu
     Columns = 0;//obowiązująca liczba kolumn dla tablicy algorytmu
 }
 
 
-void ConwayAlg::ClearValues()//zerowanie wartości pól w tablicy roboczej algorytmu
+void LCD_state_boolean_table::ClearValues()//zerowanie wartości pól w tablicy roboczej algorytmu
 {
     for (int i = 0; i < Rows; ++i)
     {
@@ -21,7 +21,7 @@ void ConwayAlg::ClearValues()//zerowanie wartości pól w tablicy roboczej algor
 }
 
 
-void ConwayAlg::ScreenAns()//metoda przkazująca do mainwindow wszystkie wartości logiczne w tablicy roboczej
+void LCD_state_boolean_table::ScreenAns()//metoda przkazująca do mainwindow wszystkie wartości logiczne w tablicy roboczej
 {
     for (int i = 0; i < Rows; ++i)
     {
@@ -33,7 +33,7 @@ void ConwayAlg::ScreenAns()//metoda przkazująca do mainwindow wszystkie wartoś
 }
 
 
-void ConwayAlg::NewRows(int newRow)//funkcja ustawiająca nową ilość rzędów w algorytmie
+void LCD_state_boolean_table::NewRows(int newRow)//funkcja ustawiająca nową ilość rzędów w algorytmie
 {
     Field.resize(newRow);//aktualizacja liczby wierszy
 
@@ -47,7 +47,7 @@ void ConwayAlg::NewRows(int newRow)//funkcja ustawiająca nową ilość rzędów
 }
 
 
-void ConwayAlg::NewColumns(int newCol)//funkcja ustawiająca nową ilość kolumn w algorytmie
+void LCD_state_boolean_table::NewColumns(int newCol)//funkcja ustawiająca nową ilość kolumn w algorytmie
 {
     for(int i = 0; i < Rows; ++i)//dla każdego wiersza aktualizacja liczby kolumn
     {

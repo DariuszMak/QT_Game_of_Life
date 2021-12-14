@@ -35,19 +35,12 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    ConwayAlg * Algorithm;//wskaźnik na obiekt klasy ConwayAlg
+    LCD_state_boolean_table * Algorithm;//wskaźnik na obiekt klasy ConwayAlg
 
     int Table_widget_cell_size;
 
     int NumberOfColumns;
     int NumberOfRows;
-
-    bool IsRunning;//zmienna wyznaczająca, czy symulacja trwa, czy nie
-    bool Changed;//zmienna przechowująca informację, czy coś się na ekranie zmieniło
-    QTimer Timer;//timer wykorzystany do animacji
-//    QTimer TimerController;//timer wykorzystany do kontroli szybkości odświeżania się algorytmu
-
-//    int MilisecondsPerFrame;//zmienna przechowująca ilość klatek
 
     int MinSizeSquare;//zmienna przechowująca najmniejszą dopuszczalną wartość rozmiaru pojedynczego kwadracika w tabeli w pikselach
 

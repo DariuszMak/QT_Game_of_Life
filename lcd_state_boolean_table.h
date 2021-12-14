@@ -7,11 +7,11 @@
 #include <QTimer>
 
 
-class ConwayAlg : public QObject
+class LCD_state_boolean_table : public QObject
 {
     Q_OBJECT
 public:
-    ConwayAlg();
+    LCD_state_boolean_table();
 private:
     int Rows;//obowiĂ„â€¦zujĂ„â€¦ca liczba wierszy dla tablicy algorytmu
     int Columns;//obowiĂ„â€¦zujĂ„â€¦ca liczba kolumn dla tablicy algorytmu
@@ -27,7 +27,6 @@ public slots:
 signals:
     void NewRowsInf(int);//sygnaÄąâ€š przekazujĂ„â€¦cy do mainwindow informacjĂ„â„˘ o zmienionej liczbie wierszy w algorytmie
     void NewColumnsInf(int);//sygnaÄąâ€š przekazujĂ„â€¦cy do mainwindow informacjĂ„â„˘ o zmienionej liczbie kolumn w algorytmie
-    void ActualStatusInf(int, int);//sygnaÄąâ€š przekazujĂ„â€¦cy do mainwindow informacjĂ„â„˘ o iloÄąâ€şĂ„â€ˇi ÄąÄ˝ywych obiektÄ‚Ĺ‚w oraz wykonanych iteracji
     void ChangeItem(int, int, bool);//sygnaÄąâ€š nakazujĂ„â€¦cy zmieniĂ„â€ˇ pole w mainwindow na zgodne z wartoÄąâ€şciĂ„â€¦ logicznĂ„â€¦
 };
 
