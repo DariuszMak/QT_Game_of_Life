@@ -88,9 +88,15 @@ void MainWindow::printBuffer(uint8_t * const displayBuffer)
 
 void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 {
-    std::printf("DisplayAccordingToBuffer invoked");
-//    std::printf("DisplayTable");
+    std::printf("DisplayAccordingToBuffer invoked. \n");
 
+    for (int i = 0; i < this->NumberOfRows; ++i)
+    {
+        for(int j = 0; j < this->NumberOfColumns; ++j)//przejście przez całą tablicę
+        {
+//            emit(this->SwitchField(i, j, false));//przesłanie wszystkich wartości logicznych algorytmu
+        }
+    }
 }
 
 void MainWindow::TidyUpScreen()
