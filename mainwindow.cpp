@@ -28,7 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(Algorithm, SIGNAL(NewColumnsInf(int)), this, SLOT(ColumnsChanged(int)));//utworzenie odpowiedniej wielkości kolumn tabeli na podstawie przyjętej wartości z algorytmu
     connect(Algorithm, SIGNAL(NewRowsInf(int)), this, SLOT(RowsChanged(int)));//utworzenie odpowiedniej wielkości wierszy tabeli na podstawie przyjętej wartości z algorytmu
-    connect(Algorithm, SIGNAL(ActualStatusInf(int,int)), this, SLOT(StatusUpdate(int,int)));//aktualny stan ilości żywych komórek oraz iteracji przekazany do mainwindow
     connect(ui->LifeField, SIGNAL(cellEntered(int,int)), Algorithm, SLOT(ToggleCell(int,int)));//jeśli nastąpi kliknięcie na tabelę, to zostanie podjęta akcja ożywienia lub umartwienia komórek
     connect(Algorithm, SIGNAL(ChangeItem(int,int,bool)), this, SLOT(SwitchField(int,int,bool)));//jeśli zmienił się stan logiczny pla w algorytmie, trzeba to również zaznaczyć na ekranie
     connect(ui->Cleaner, SIGNAL(clicked()), this, SLOT(ClearScreen()));//jeśli kliknięto na przycisk "wyczyść", to nastąpi wyczyszczenie ekranu
@@ -37,14 +36,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(ScreenAsk()), Algorithm, SLOT(ScreenAns()));//po zapytaniu algorytmu na ekran zostaną przesłane wszystkie wartości logiczne prawdziwe
 
     connect(this, SIGNAL(DoStep()), Algorithm, SLOT(Step()));//jeśli kliknie się na przycisk "krok" następuje pojedyncza iteracja algorytmu
-    connect(this, SIGNAL(TidyUp()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
+    connect(this, SIGNAL(Refresh_fields_state()), this, SLOT(TidyUpScreen()));//porządkowanie właściowści programu w celu uzyskania maksymalnej spójności
 
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));//konfiguracja losowości
 
     SetInitialValues();//ustawienie wartości początkowych
-
-//    setWindowTitle(TitleProj);// ustawienie początkowego tytułu programu
-    //Load();//otwarcie domyślnej ścieżki pliku
 }
 
 MainWindow::~MainWindow()//destruktor okna MainWindow
@@ -80,11 +76,6 @@ void MainWindow::SetInitialValues()//metoda ustawiająca wszystkie niezbędne wa
 //********Sloty*********
 
 
-/*void MainWindow::TimerControllerTimeout()//akcja reagująca na przepełnienie się timera kontrolującego przebieg animacji
-{
-    //++MilisecondsPerFrame;
-}*/
-
 void MainWindow::TidyUpScreen()//funkcja dobierająca właściwości w oknie tak, aby kompozycja była spójna
 {
     std::printf("Tidy up screen invoked. \n");
@@ -101,7 +92,7 @@ void MainWindow::ResizeField(int NewSize)//funkcja przyjmująca rozmiar pojedync
     {
         if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//aktualizowany rozmiar mowo tworzonych kolumn (jeśli inny od starego)
     }
-    emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
+    emit(Refresh_fields_state());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
 }
 
 void MainWindow::ClearScreen()//funkcja czyszcząca ekran i dane w algorytmie i na ekranie jednocześnie zatrzymuje symulację, ponieważ nie ma żywych pól w tabeli
@@ -163,7 +154,7 @@ void MainWindow::RowsChanged(int newRow)//utworzenie odpowiedniej wielkości wie
         }
         ui->LifeField->setRowHeight(i, Table_widget_cell_size);//jeśli było więcej wierszy, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }
-    emit (TidyUp());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
+    emit(Refresh_fields_state());//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
 
@@ -183,14 +174,14 @@ void MainWindow::ColumnsChanged(int newCol)//utworzenie odpowiedniej wielkości 
         }
         ui->LifeField->setColumnWidth(i, Table_widget_cell_size);//jeśli było więcej kolumn, to te powstałe "zbyt szerokie" zostaną ustawione do właśwej szerokości
     }    
-    emit (TidyUp());//sygnał porządkujący właściowści programu w celu uzyskania maksymalnej spójności
+    emit (Refresh_fields_state());//sygnał porządkujący właściowści programu w celu uzyskania maksymalnej spójności
     emit StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
 }
 
 
 void MainWindow::on_actionOd_wie_triggered()
 {
-    TidyUp();
+    Refresh_fields_state();
     emit(ScreenAsk());
 }
 

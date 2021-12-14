@@ -87,7 +87,7 @@ signals:
     void StatusAsk();//zapytanie algorytmu o ilość żywych kokórek i iteracji
     void ScreenAsk();//zapytanie o wszystkie wartości prawdziwe w tablicy roboczej algorytmu
     void ClearAlg(); //zerowanie zawartości tablicy roboczej algorytmu
-    void TidyUp();//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
+    void Refresh_fields_state();//sygnał porządkujący właściowści ona programu w celu uzyskania maksymalnej spójności
     void CloseOtherWindows();//sygnał zamknięcia innych okien
 };
 

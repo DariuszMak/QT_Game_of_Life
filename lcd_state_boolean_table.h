@@ -21,7 +21,6 @@ private:
 public slots:
     void NewRows(int);//funkcja ustawiajĂ„â€¦ca nowĂ„â€¦ iloÄąâ€şĂ„â€ˇ rzĂ„â„˘dÄ‚Ĺ‚w w algorytmie
     void NewColumns(int);//funkcja ustawiajĂ„â€¦ca nowĂ„â€¦ iloÄąâ€şĂ„â€ˇ kolumn w algorytmie
-    void ToggleCell(int, int);//zmiana logiczna w tablicy roboczej algortymu.
     void ScreenAns();//metoda przkazujĂ„â€¦ca do mainwindow wszystkie wartoÄąâ€şci logiczne w tablicy roboczej
     void ClearValues();//zerowanie wartoÄąâ€şci pÄ‚Ĺ‚l w tablicy roboczej algorytmu
 

@@ -33,22 +33,6 @@ void ConwayAlg::ScreenAns()//metoda przkazująca do mainwindow wszystkie wartoś
 }
 
 
-void ConwayAlg::ToggleCell(int x, int y)//zmiana logiczna w tablicy roboczej algortymu.
-{
-    bool set = Field[x][y];//przypisanie faktycznej wartości logicznej
-
-    if(set)
-    {
-       Field[x][y] = false;//zmiana tej wartości na przeciwną
-    }
-    else
-    {
-        Field[x][y] = true;//zmiana tej wartości na przeciwną
-    }
-    emit( ChangeItem(x, y, !set));//sygnał nakazujący zmienić pole w mainwindow na zgodne z wartością logiczną zanegowaną
-}
-
-
 void ConwayAlg::NewRows(int newRow)//funkcja ustawiająca nową ilość rzędów w algorytmie
 {
     Field.resize(newRow);//aktualizacja liczby wierszy
