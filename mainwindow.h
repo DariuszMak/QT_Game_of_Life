@@ -38,12 +38,6 @@ private:
 
     int Table_widget_cell_size;
 
-    int LCDNubmberOfXCoord;
-    int LCDNubmberOfYCoord;
-
-    int NumberOfColumnsInWidget;
-    int NumberOfRowsInWidget;
-
     int MinSizeSquare;
 
     QString TitleProj;

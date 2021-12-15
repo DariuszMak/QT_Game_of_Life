@@ -9,12 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Table_widget_cell_size = 1;
 
-    LCDNubmberOfXCoord = DISPLAY_COLUMNS;
-    LCDNubmberOfYCoord = 8;
-
-    NumberOfColumnsInWidget = 128;
-    NumberOfRowsInWidget = 64;
-
     ui->setupUi(this);
 
     MinSizeSquare = 1;
@@ -52,24 +46,24 @@ void MainWindow::SetInitialValues()
     AliveColor = QColor("yellow");
     DeadColor = QColor("black");
 
-    this->RowsChanged(this->NumberOfRowsInWidget);
-    this->ColumnsChanged(this->NumberOfColumnsInWidget);
+    this->RowsChanged(DISPLAY_ROWS);
+    this->ColumnsChanged(DISPLAY_COLUMNS);
 }
 
 void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
 {
     std::printf("Display According To Buffer invoked. \n");
 
-    for (int y = 0; y < this->LCDNubmberOfYCoord; ++y)
+    for (int y = 0; y < DISPLAY_PAGES; ++y)
     {
-        for(int x = 0; x < this->LCDNubmberOfXCoord; ++x)
+        for(int x = 0; x < DISPLAY_COLUMNS; ++x)
         {
             int buffer_index = (y * 128)+ x;
             int byte_from_buffer = displayBuffer[buffer_index];
 
             for(int byte_number = 0; byte_number < 8; ++byte_number) {
                 bool logical_value = ((byte_from_buffer >> byte_number)  & 0x01);
-                int y_coordinate_for_widget = (y * 8) + byte_number;
+                int y_coordinate_for_widget = (y * DISPLAY_PAGES) + byte_number;
 
                 cout << "y: " << y << ", x: " << x << ", buffer_index: " << buffer_index << ", byte_from_buffer: " << byte_from_buffer << ", y_coordinate_for_widget: " << y_coordinate_for_widget << ", boolean_value: " << logical_value<< endl;
 

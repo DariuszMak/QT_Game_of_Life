@@ -11,11 +11,11 @@
 #define DISPLAY_PAGES 8
 #endif
 
+#ifndef DISPLAY_ROWS
+#define DISPLAY_ROWS (DISPLAY_PAGES * 8)
+#endif
+
 #define DISPLAY_BUFFER_SIZE (DISPLAY_COLUMNS * DISPLAY_PAGES)
-
-#define VERTICAL_DISPLAY_COLUMNS (DISPLAY_PAGES * 8)
-#define VERTICAL_DISPLAY_PAGES   (DISPLAY_COLUMNS / 8)
-
 
 class QtSimulator_LCD : public display
 {
