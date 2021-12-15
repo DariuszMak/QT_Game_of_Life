@@ -58,7 +58,7 @@ void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
     {
         for(int x = 0; x < DISPLAY_COLUMNS; ++x)
         {
-            int buffer_index = (y * 128)+ x;
+            int buffer_index = (y * DISPLAY_COLUMNS)+ x;
             int byte_from_buffer = displayBuffer[buffer_index];
 
             for(int byte_number = 0; byte_number < 8; ++byte_number) {
