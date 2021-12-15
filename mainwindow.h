@@ -65,8 +65,6 @@ private slots:
     void RowsChanged(int);
     void ColumnsChanged(int);
     void SwitchField(int, int, bool);
-    
-    void ClearScreen();
     void ResizeField(int);
 
 signals:

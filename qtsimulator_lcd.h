@@ -12,7 +12,12 @@ public:
     ~QtSimulator_LCD() = default;
     QtSimulator_LCD(MainWindow * mainWindow_ref);
 
+    uint8_t font_ASCII;
+
     void printBuffer(uint8_t * const);
+    void printSimpleText(uint8_t * const, char *);
+
+    void initialize_function();
 
 private:
     uint8_t LCDDataBuffer[1024] { 0 };

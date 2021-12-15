@@ -18,9 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     MinSizeSquare = 1;
 
-    connect(ui->Cleaner, SIGNAL(clicked()), this, SLOT(ClearScreen()));
-
-
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));
     SetInitialValues();
 }
