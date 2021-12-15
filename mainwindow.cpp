@@ -8,23 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Table_widget_cell_size = 1;
 
-    for (unsigned int i = 0; i < 1024; i++)
-    {
-        if (i == 0){
-            LCDDataBuffer[i] = 0x03;
-        }
-
-        if (i == 128){
-            LCDDataBuffer[i] = 0xff;
-        }
-
-        if (i == 1023){
-            LCDDataBuffer[i] = 0xf0;
-        }
-
-        std::cout << i << ": " << LCDDataBuffer[i] << std::endl;
-    }
-
     LCDNubmberOfXCoord = 128;
     LCDNubmberOfYCoord = 8;
 
@@ -73,13 +56,6 @@ void MainWindow::SetInitialValues()
 
     this->RowsChanged(this->NumberOfRowsInWidget);
     this->ColumnsChanged(this->NumberOfColumnsInWidget);
-
-    this->printBuffer(this->LCDDataBuffer);
-}
-
-void MainWindow::printBuffer(uint8_t * const displayBuffer)
-{
-    this->DisplayAccordingToBuffer(displayBuffer);
 }
 
 void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)

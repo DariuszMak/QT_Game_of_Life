@@ -31,14 +31,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void DisplayAccordingToBuffer(uint8_t * const);
+
 private:
     Ui::MainWindow *ui;
 
     int Table_widget_cell_size;
-    int LCDDataBufferSize;
-
-    uint8_t LCDDataBuffer[1024] { 0 };
-
 
     int LCDNubmberOfXCoord;
     int LCDNubmberOfYCoord;
@@ -70,9 +68,6 @@ private slots:
     
     void ClearScreen();
     void ResizeField(int);
-    void DisplayAccordingToBuffer(uint8_t * const);
-
-    void printBuffer(uint8_t * const);
 
 signals:
     void ClearAlg(); 
