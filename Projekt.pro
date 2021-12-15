@@ -17,6 +17,7 @@ SOURCES += main.cpp\
         qtsimulator_lcd.cpp
 
 HEADERS  += mainwindow.h \
+    display.h \
     qtsimulator_lcd.h
 
 FORMS    += mainwindow.ui
