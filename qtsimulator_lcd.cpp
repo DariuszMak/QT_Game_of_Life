@@ -28,7 +28,6 @@ QtSimulator_LCD::QtSimulator_LCD(MainWindow * mainWindow_ref)
     this->printBuffer(this->LCDDataBuffer);
 }
 
-
 void QtSimulator_LCD::printBuffer(uint8_t * const displayBuffer)
 {
     this->mainWindow_ref->DisplayAccordingToBuffer(displayBuffer);

@@ -95,11 +95,6 @@ void MainWindow::ResizeField(int NewSize)
     }
 }
 
-void MainWindow::ClearScreen()
-{
-    emit(ClearAlg());
-}
-
 void MainWindow::SwitchField(int x, int y, bool value)
 {
     QTableWidgetItem * item = ui->LifeField->item(x, y);
