@@ -14,22 +14,24 @@ QtSimulator_LCD::QtSimulator_LCD(MainWindow * mainWindow_ref)
     this->printSimpleText(this->LCDDataBuffer, "LCD lcd");
 }
 
-//uint16_t QtSimulator_LCD::getDisplayBufferPosition(uint8_t page, uint8_t column)
-//{
-//    if (page > (DISPLAY_PAGES - 1))
-//        page = (DISPLAY_PAGES - 1);
-//    if (column > (DISPLAY_COLUMNS - 1))
-//        column = (DISPLAY_COLUMNS - 1);
-//    return ((page * DISPLAY_COLUMNS) + column);
-//}
+uint16_t QtSimulator_LCD::getDisplayBufferPosition(uint8_t page, uint8_t column)
+{
+    if (page > (DISPLAY_PAGES - 1))
+        page = (DISPLAY_PAGES - 1);
+    if (column > (DISPLAY_COLUMNS - 1))
+        column = (DISPLAY_COLUMNS - 1);
+    return ((page * DISPLAY_COLUMNS) + column);
+}
 
-//void QtSimulator_LCD::renderText(char *inputText, uint8_t page, uint8_t column)
-//{
-//    uint8_t *textRenderBuffer = malloc(100 * sizeof(uint8_t));
-//    memcpy(guiDisplayBuffer + this->getDisplayBufferPosition(page, column), textRenderBuffer,
-//           create_text_buff(textRenderBuffer, inputText));
-//    free(textRenderBuffer);
-//}
+uint16_t QtSimulator_LCD::create_text_buff(unsigned char *target_buffer, char *input_text)
+{
+
+}
+
+void QtSimulator_LCD::renderText(char *inputText, uint8_t page, uint8_t column)
+{
+
+}
 
 void QtSimulator_LCD::printSimpleText(uint8_t * const displayBuffer, char * input_text)
 {
