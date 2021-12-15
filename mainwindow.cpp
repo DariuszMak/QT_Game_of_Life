@@ -38,10 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->Cleaner, SIGNAL(clicked()), this, SLOT(ClearScreen()));
 
 
-
-
-
-    connect(this, SIGNAL(Refresh_fields_state()), this, SLOT(TidyUpScreen()));
     srand(QTime::currentTime().msecsTo(QTime(0, 0, 0, 0)));
     SetInitialValues();
 }
@@ -50,9 +46,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
-
 
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -86,8 +79,6 @@ void MainWindow::SetInitialValues()
 
 
 
-
-
 void MainWindow::printBuffer(uint8_t * const displayBuffer)
 {
     this->DisplayAccordingToBuffer(displayBuffer);
@@ -116,10 +107,6 @@ void MainWindow::DisplayAccordingToBuffer(uint8_t * const displayBuffer)
     }
 }
 
-void MainWindow::TidyUpScreen()
-{
-    std::printf("Tidy up screen invoked. \n");
-}
 
 void MainWindow::ResizeField(int NewSize)
 {
@@ -132,7 +119,6 @@ void MainWindow::ResizeField(int NewSize)
     {
         if(ui->LifeField->columnWidth(i) != NewSize) ui->LifeField->setColumnWidth(i, Table_widget_cell_size);
     }
-    emit(Refresh_fields_state());
 }
 
 void MainWindow::ClearScreen()
@@ -184,7 +170,7 @@ void MainWindow::RowsChanged(int newRow)
 
     ui->LifeField->setRowCount(newRow);
 
-    
+
     for(int i = oldRows; i < newRow; ++i)
     {
         for(int j = 0; j < ui->LifeField->columnCount(); ++j)
@@ -193,7 +179,6 @@ void MainWindow::RowsChanged(int newRow)
         }
         ui->LifeField->setRowHeight(i, Table_widget_cell_size);
     }
-    emit(Refresh_fields_state());
 }
 
 void MainWindow::ColumnsChanged(int newCol)
@@ -203,7 +188,7 @@ void MainWindow::ColumnsChanged(int newCol)
 
     ui->LifeField->setColumnCount(newCol);
 
-    
+
     for(int i = oldColumns; i < newCol; ++i)
     {
         for(int j = 0; j < ui->LifeField->rowCount(); ++j)
@@ -211,6 +196,5 @@ void MainWindow::ColumnsChanged(int newCol)
             SwitchField(j, i, false);
         }
         ui->LifeField->setColumnWidth(i, Table_widget_cell_size);
-    }    
-    emit (Refresh_fields_state());
+    }
 }

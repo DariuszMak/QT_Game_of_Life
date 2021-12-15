@@ -70,14 +70,12 @@ private slots:
     
     void ClearScreen();
     void ResizeField(int);
-    void TidyUpScreen();
     void DisplayAccordingToBuffer(uint8_t * const);
 
     void printBuffer(uint8_t * const);
 
 signals:
     void ClearAlg(); 
-    void Refresh_fields_state();
     void CloseOtherWindows();
     void LcdBufferModified();
 };
