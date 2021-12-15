@@ -77,8 +77,6 @@ void MainWindow::SetInitialValues()
     this->printBuffer(this->LCDDataBuffer);
 }
 
-
-
 void MainWindow::printBuffer(uint8_t * const displayBuffer)
 {
     this->DisplayAccordingToBuffer(displayBuffer);

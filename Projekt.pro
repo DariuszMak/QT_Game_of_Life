@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+        qtsimulator_lcd.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    qtsimulator_lcd.h
 
 FORMS    += mainwindow.ui
 
