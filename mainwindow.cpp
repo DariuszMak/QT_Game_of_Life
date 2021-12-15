@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qtsimulator_lcd.h"
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -8,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     Table_widget_cell_size = 1;
 
-    LCDNubmberOfXCoord = 128;
+    LCDNubmberOfXCoord = DISPLAY_COLUMNS;
     LCDNubmberOfYCoord = 8;
 
     NumberOfColumnsInWidget = 128;

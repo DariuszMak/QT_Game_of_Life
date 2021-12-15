@@ -4,6 +4,19 @@
 #include "mainwindow.h"
 #include "display.h"
 
+#ifndef DISPLAY_COLUMNS
+#define DISPLAY_COLUMNS 128
+#endif
+#ifndef DISPLAY_PAGES
+#define DISPLAY_PAGES 8
+#endif
+
+#define DISPLAY_BUFFER_SIZE (DISPLAY_COLUMNS * DISPLAY_PAGES)
+
+#define VERTICAL_DISPLAY_COLUMNS (DISPLAY_PAGES * 8)
+#define VERTICAL_DISPLAY_PAGES   (DISPLAY_COLUMNS / 8)
+
+
 class QtSimulator_LCD : public display
 {
 public:
