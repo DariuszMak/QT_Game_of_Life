@@ -8,8 +8,6 @@ QtSimulator_LCD::QtSimulator_LCD(MainWindow * mainWindow_ref)
 
     this->mainWindow_ref->show();
 
-
-
     for (unsigned int i = 0; i < 1024; i++)
     {
         if (i == 0){
@@ -26,7 +24,6 @@ QtSimulator_LCD::QtSimulator_LCD(MainWindow * mainWindow_ref)
 
         std::cout << i << ": " << LCDDataBuffer[i] << std::endl;
     }
-
 
     this->printBuffer(this->LCDDataBuffer);
 }
