@@ -11,7 +11,7 @@ QtSimulator_LCD::QtSimulator_LCD(MainWindow * mainWindow_ref)
 
     initialize_function();
 
-    this->printSimpleText(this->LCDDataBuffer, "LCD lcd");
+    this->renderText("LCD lcd", 2, 4);
 }
 
 uint16_t QtSimulator_LCD::getDisplayBufferPosition(uint8_t page, uint8_t column)
@@ -23,23 +23,42 @@ uint16_t QtSimulator_LCD::getDisplayBufferPosition(uint8_t page, uint8_t column)
     return ((page * DISPLAY_COLUMNS) + column);
 }
 
-uint16_t QtSimulator_LCD::create_text_buff(unsigned char *target_buffer, char *input_text)
-{
-
-}
-
 void QtSimulator_LCD::renderText(char *inputText, uint8_t page, uint8_t column)
 {
+    this->modify_buffer(this->LCDDataBuffer, inputText);
 
+    uint16_t displayBufferPosition = this->getDisplayBufferPosition(page, column);
+
+    memcpy(this->LCDDataBuffer + displayBufferPosition, inputText, this->create_text_buff(this->LCDDataBuffer, inputText));
+
+    this->printBuffer(this->LCDDataBuffer);
 }
 
-void QtSimulator_LCD::printSimpleText(uint8_t * const displayBuffer, char * input_text)
+uint16_t QtSimulator_LCD::create_text_buff(unsigned char *target_buffer, char *input_text)
 {
-    std::printf("printing simple text");
+    uint16_t byte_counter = 0;
 
-    this->printBuffer(displayBuffer);
+    while (*input_text != 0x00)
+        {
+            int ch = *input_text++;
+
+            const uint8_t *font = this->font_ASCII[ch - ' '][0];
+
+            for (int i = 0; i < 5; i++)
+                {
+                    *target_buffer++ = *font++;
+                    byte_counter++;
+                }
+            *target_buffer++ = 0x00;
+            byte_counter++;
+        }
+    return (byte_counter);
 }
 
+uint16_t QtSimulator_LCD::modify_buffer(unsigned char *target_buffer, char *input_text)
+{
+
+}
 
 void QtSimulator_LCD::printBuffer(uint8_t * const displayBuffer)
 {

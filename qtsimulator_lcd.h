@@ -28,11 +28,11 @@ public:
     uint8_t font_ASCII;
 
     uint16_t getDisplayBufferPosition(uint8_t page, uint8_t column);
-    uint16_t create_text_buff(unsigned char *target_buffer, char *input_text);
+    uint16_t modify_buffer(unsigned char *target_buffer, char *input_text);
     void renderText(char *inputText, uint8_t page, uint8_t column);
+    uint16_t create_text_buff(unsigned char *target_buffer, char *input_text);
 
     void printBuffer(uint8_t * const);
-    void printSimpleText(uint8_t * const, char *);
 
     void initialize_function();
 
